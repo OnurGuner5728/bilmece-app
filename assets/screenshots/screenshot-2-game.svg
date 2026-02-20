@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A8D8EA"/>
+      <stop offset="100%" stop-color="#D4B5E6"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4A90D9"/>
+      <stop offset="100%" stop-color="#5BA3EC"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF8C42"/>
+      <stop offset="100%" stop-color="#FFA566"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#00000025"/>
+    </filter>
+    <filter id="softShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000018"/>
+    </filter>
+    <filter id="btnShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#FF8C4244"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="url(#bgGrad)"/>
+
+  <!-- Decorative shapes -->
+  <circle cx="100" cy="1700" r="250" fill="#ffffff08"/>
+  <circle cx="980" cy="300" r="150" fill="#ffffff10"/>
+
+  <!-- Status bar -->
+  <rect x="0" y="0" width="1080" height="80" fill="#00000008"/>
+  <text x="540" y="52" font-family="Arial, sans-serif" font-size="28" fill="#2D3436" text-anchor="middle" opacity="0.6">9:41</text>
+
+  <!-- Top bar with back button and question counter -->
+  <rect x="0" y="80" width="1080" height="100" fill="#ffffff30"/>
+  <text x="60" y="145" font-family="Arial, sans-serif" font-size="40" fill="#2D3436">&#x2190;</text>
+  <text x="540" y="145" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="#2D3436" text-anchor="middle">Soru 3 / 10</text>
+  <text x="1000" y="145" font-family="Arial, sans-serif" font-size="34" fill="#FF8C42" text-anchor="middle">&#x1F4A1;</text>
+
+  <!-- Progress bar background -->
+  <rect x="90" y="220" width="900" height="18" rx="9" ry="9" fill="#ffffff50"/>
+  <!-- Progress bar fill (60%) -->
+  <rect x="90" y="220" width="540" height="18" rx="9" ry="9" fill="url(#blueGrad)"/>
+  <!-- Progress dot -->
+  <circle cx="630" cy="229" r="14" fill="#4A90D9" stroke="white" stroke-width="4"/>
+
+  <!-- Category badge -->
+  <rect x="380" y="280" width="320" height="55" rx="28" ry="28" fill="white" filter="url(#softShadow)"/>
+  <text x="540" y="317" font-family="Arial, sans-serif" font-size="26" fill="#4A90D9" text-anchor="middle">&#x1F33F; Doga Kategorisi</text>
+
+  <!-- Main riddle card -->
+  <rect x="70" y="400" width="940" height="520" rx="20" ry="20" fill="white" filter="url(#cardShadow)"/>
+
+  <!-- Card top accent -->
+  <rect x="70" y="400" width="940" height="8" rx="4" ry="0" fill="url(#blueGrad)"/>
+
+  <!-- Riddle question mark decoration -->
+  <circle cx="540" cy="520" r="70" fill="#F0F7FF"/>
+  <text x="540" y="548" font-family="Arial, sans-serif" font-size="72" fill="#4A90D9" text-anchor="middle" opacity="0.4">?</text>
+
+  <!-- Riddle text -->
+  <text x="540" y="680" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#2D3436" text-anchor="middle">"Dalda durur,</text>
+  <text x="540" y="750" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#2D3436" text-anchor="middle">elde durmaz."</text>
+
+  <!-- Difficulty indicator -->
+  <text x="540" y="850" font-family="Arial, sans-serif" font-size="26" fill="#888" text-anchor="middle">&#x2B50; &#x2B50; &#x2606; Orta Seviye</text>
+
+  <!-- Hint button -->
+  <rect x="340" y="990" width="400" height="90" rx="45" ry="45" fill="url(#orangeGrad)" filter="url(#btnShadow)"/>
+  <text x="540" y="1048" font-family="Arial, sans-serif" font-size="34" font-weight="bold" fill="white" text-anchor="middle">&#x1F4A1; Ipucu Goster</text>
+
+  <!-- Answer options -->
+  <rect x="90" y="1150" width="430" height="130" rx="20" ry="20" fill="white" filter="url(#softShadow)"/>
+  <text x="305" y="1225" font-family="Arial, sans-serif" font-size="36" fill="#2D3436" text-anchor="middle">&#x1F426; Kus</text>
+
+  <rect x="560" y="1150" width="430" height="130" rx="20" ry="20" fill="white" filter="url(#softShadow)"/>
+  <text x="775" y="1225" font-family="Arial, sans-serif" font-size="36" fill="#2D3436" text-anchor="middle">&#x1F33A; Cicek</text>
+
+  <rect x="90" y="1310" width="430" height="130" rx="20" ry="20" fill="white" filter="url(#softShadow)"/>
+  <text x="305" y="1385" font-family="Arial, sans-serif" font-size="36" fill="#2D3436" text-anchor="middle">&#x1F343; Yaprak</text>
+
+  <rect x="560" y="1310" width="430" height="130" rx="20" ry="20" fill="white" filter="url(#softShadow)"/>
+  <text x="775" y="1385" font-family="Arial, sans-serif" font-size="36" fill="#2D3436" text-anchor="middle">&#x2744;&#xFE0F; Kar</text>
+
+  <!-- Timer -->
+  <rect x="400" y="1510" width="280" height="65" rx="33" ry="33" fill="#ffffff80"/>
+  <text x="540" y="1555" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle" opacity="0.7">&#x23F0; 0:42</text>
+
+  <!-- Bottom navigation bar -->
+  <rect x="0" y="1790" width="1080" height="130" fill="white"/>
+  <rect x="0" y="1790" width="1080" height="1" fill="#E0E0E0"/>
+  <text x="200" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3E0;</text>
+  <text x="200" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Ana Sayfa</text>
+  <text x="540" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3C6;</text>
+  <text x="540" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Skor</text>
+  <text x="880" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x2699;&#xFE0F;</text>
+  <text x="880" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Ayarlar</text>
+</svg>

@@ -1,30 +1,52 @@
 {
   "expo": {
-    "name": "bilmece-app",
-    "slug": "bilmece-app",
+    "name": "Bilmecelerce",
+    "slug": "bilmece-dunyasi",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "bilmecelerce",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#A8D8EA"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bilmecedunyasi.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "Kisisellestirilmis reklamlar gostermek icin izninizi istiyoruz."
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/icon.png"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#A8D8EA"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.bilmecedunyasi.app",
+      "versionCode": 1,
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ]
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4c4cf7c8-11d0-41e5-91da-57070f2ecdc6"
+      },
+      "router": {}
+    },
+    "owner": "ogishere"
   }
 }

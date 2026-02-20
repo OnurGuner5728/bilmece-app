@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#A8D8EA"/>
+      <stop offset="100%" stop-color="#D4B5E6"/>
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4A90D9"/>
+      <stop offset="100%" stop-color="#5BA3EC"/>
+    </linearGradient>
+    <linearGradient id="orangeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF8C42"/>
+      <stop offset="100%" stop-color="#FFA566"/>
+    </linearGradient>
+    <linearGradient id="pinkGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF6B9D"/>
+      <stop offset="100%" stop-color="#FF8FB4"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#00000022"/>
+    </filter>
+    <filter id="softShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000018"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="url(#bgGrad)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="900" cy="200" r="180" fill="#ffffff15"/>
+  <circle cx="150" cy="400" r="120" fill="#ffffff10"/>
+  <circle cx="950" cy="1600" r="200" fill="#ffffff10"/>
+
+  <!-- Status bar area -->
+  <rect x="0" y="0" width="1080" height="80" fill="#00000008"/>
+  <text x="540" y="52" font-family="Arial, sans-serif" font-size="28" fill="#2D3436" text-anchor="middle" opacity="0.6">9:41</text>
+
+  <!-- App logo / icon area -->
+  <circle cx="540" cy="300" r="90" fill="white" filter="url(#softShadow)"/>
+  <text x="540" y="325" font-family="Arial, sans-serif" font-size="80" text-anchor="middle">&#x1F9E9;</text>
+
+  <!-- Title -->
+  <text x="540" y="480" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#2D3436" text-anchor="middle">&#x1F9E9; Bilmecelerce</text>
+
+  <!-- Subtitle -->
+  <text x="540" y="560" font-family="Arial, sans-serif" font-size="38" fill="#2D3436" text-anchor="middle" opacity="0.7">Yas grubunu sec!</text>
+
+  <!-- Card 1: 4-6 Yas -->
+  <rect x="90" y="650" width="900" height="200" rx="20" ry="20" fill="white" filter="url(#cardShadow)"/>
+  <rect x="90" y="650" width="14" height="200" rx="7" ry="0" fill="url(#blueGrad)"/>
+  <circle cx="210" cy="750" r="55" fill="#E8F4FD"/>
+  <text x="210" y="770" font-family="Arial, sans-serif" font-size="50" text-anchor="middle">&#x1F31F;</text>
+  <text x="310" y="730" font-family="Arial, sans-serif" font-size="44" font-weight="bold" fill="#2D3436">4-6 Yas</text>
+  <text x="310" y="785" font-family="Arial, sans-serif" font-size="28" fill="#2D3436" opacity="0.5">Kolay seviye bilmeceler</text>
+  <text x="900" y="760" font-family="Arial, sans-serif" font-size="36" fill="#4A90D9" text-anchor="middle">&#x25B6;</text>
+
+  <!-- Card 2: 7-9 Yas -->
+  <rect x="90" y="890" width="900" height="200" rx="20" ry="20" fill="white" filter="url(#cardShadow)"/>
+  <rect x="90" y="890" width="14" height="200" rx="7" ry="0" fill="url(#orangeGrad)"/>
+  <circle cx="210" cy="990" r="55" fill="#FFF3E8"/>
+  <text x="210" y="1010" font-family="Arial, sans-serif" font-size="50" text-anchor="middle">&#x1F680;</text>
+  <text x="310" y="970" font-family="Arial, sans-serif" font-size="44" font-weight="bold" fill="#2D3436">7-9 Yas</text>
+  <text x="310" y="1025" font-family="Arial, sans-serif" font-size="28" fill="#2D3436" opacity="0.5">Orta seviye bilmeceler</text>
+  <text x="900" y="1000" font-family="Arial, sans-serif" font-size="36" fill="#FF8C42" text-anchor="middle">&#x25B6;</text>
+
+  <!-- Card 3: 10-12 Yas -->
+  <rect x="90" y="1130" width="900" height="200" rx="20" ry="20" fill="white" filter="url(#cardShadow)"/>
+  <rect x="90" y="1130" width="14" height="200" rx="7" ry="0" fill="url(#pinkGrad)"/>
+  <circle cx="210" cy="1230" r="55" fill="#FFE8F0"/>
+  <text x="210" y="1250" font-family="Arial, sans-serif" font-size="50" text-anchor="middle">&#x1F3C6;</text>
+  <text x="310" y="1210" font-family="Arial, sans-serif" font-size="44" font-weight="bold" fill="#2D3436">10-12 Yas</text>
+  <text x="310" y="1265" font-family="Arial, sans-serif" font-size="28" fill="#2D3436" opacity="0.5">Zor seviye bilmeceler</text>
+  <text x="900" y="1240" font-family="Arial, sans-serif" font-size="36" fill="#FF6B9D" text-anchor="middle">&#x25B6;</text>
+
+  <!-- Category chips section -->
+  <text x="540" y="1460" font-family="Arial, sans-serif" font-size="32" fill="#2D3436" text-anchor="middle" opacity="0.6">Kategoriler</text>
+
+  <!-- Chip: Hayvanlar -->
+  <rect x="70" y="1500" width="280" height="80" rx="40" ry="40" fill="white" filter="url(#softShadow)"/>
+  <text x="210" y="1550" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle">&#x1F43E; Hayvanlar</text>
+
+  <!-- Chip: Yiyecek -->
+  <rect x="400" y="1500" width="280" height="80" rx="40" ry="40" fill="white" filter="url(#softShadow)"/>
+  <text x="540" y="1550" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle">&#x1F34E; Yiyecek</text>
+
+  <!-- Chip: Doga -->
+  <rect x="730" y="1500" width="280" height="80" rx="40" ry="40" fill="white" filter="url(#softShadow)"/>
+  <text x="870" y="1550" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle">&#x1F33F; Doga</text>
+
+  <!-- Extra chips row -->
+  <rect x="160" y="1610" width="310" height="80" rx="40" ry="40" fill="white" filter="url(#softShadow)"/>
+  <text x="315" y="1660" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle">&#x1F3E0; Esyalar</text>
+
+  <rect x="520" y="1610" width="310" height="80" rx="40" ry="40" fill="white" filter="url(#softShadow)"/>
+  <text x="675" y="1660" font-family="Arial, sans-serif" font-size="30" fill="#2D3436" text-anchor="middle">&#x1F3A8; Renkler</text>
+
+  <!-- Bottom navigation bar -->
+  <rect x="0" y="1790" width="1080" height="130" rx="0" ry="0" fill="white"/>
+  <rect x="0" y="1790" width="1080" height="1" fill="#E0E0E0"/>
+  <text x="200" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3E0;</text>
+  <text x="200" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#4A90D9" text-anchor="middle">Ana Sayfa</text>
+  <text x="540" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3C6;</text>
+  <text x="540" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Skor</text>
+  <text x="880" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x2699;&#xFE0F;</text>
+  <text x="880" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Ayarlar</text>
+</svg>

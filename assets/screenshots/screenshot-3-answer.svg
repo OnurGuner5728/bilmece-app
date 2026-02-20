@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4CAF50"/>
+      <stop offset="100%" stop-color="#26A69A"/>
+    </linearGradient>
+    <linearGradient id="btnGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF8C42"/>
+      <stop offset="100%" stop-color="#FFA566"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#00000025"/>
+    </filter>
+    <filter id="softShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000018"/>
+    </filter>
+    <filter id="glowShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="30" flood-color="#ffffff40"/>
+    </filter>
+    <filter id="btnShadow" x="-5%" y="-10%" width="110%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#FF8C4244"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1920" fill="url(#bgGrad)"/>
+
+  <!-- Decorative elements -->
+  <circle cx="200" cy="300" r="200" fill="#ffffff08"/>
+  <circle cx="900" cy="500" r="150" fill="#ffffff08"/>
+  <circle cx="150" cy="1500" r="180" fill="#ffffff06"/>
+  <circle cx="950" cy="1400" r="220" fill="#ffffff06"/>
+
+  <!-- Confetti/sparkle decorations -->
+  <text x="150" y="250" font-family="Arial, sans-serif" font-size="50" opacity="0.5">&#x2728;</text>
+  <text x="850" y="350" font-family="Arial, sans-serif" font-size="40" opacity="0.4">&#x1F389;</text>
+  <text x="200" y="700" font-family="Arial, sans-serif" font-size="35" opacity="0.3">&#x2B50;</text>
+  <text x="900" y="650" font-family="Arial, sans-serif" font-size="45" opacity="0.4">&#x2728;</text>
+  <text x="100" y="1100" font-family="Arial, sans-serif" font-size="30" opacity="0.3">&#x1F38A;</text>
+  <text x="980" y="1000" font-family="Arial, sans-serif" font-size="35" opacity="0.3">&#x1F389;</text>
+
+  <!-- Status bar -->
+  <rect x="0" y="0" width="1080" height="80" fill="#00000008"/>
+  <text x="540" y="52" font-family="Arial, sans-serif" font-size="28" fill="white" text-anchor="middle" opacity="0.8">9:41</text>
+
+  <!-- Success header -->
+  <text x="540" y="200" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="white" text-anchor="middle">DOGRU!</text>
+  <text x="540" y="260" font-family="Arial, sans-serif" font-size="32" fill="white" text-anchor="middle" opacity="0.8">Harika tahmin! &#x1F389;</text>
+
+  <!-- Big emoji circle -->
+  <circle cx="540" cy="480" r="140" fill="#ffffff20" filter="url(#glowShadow)"/>
+  <circle cx="540" cy="480" r="120" fill="#ffffff30"/>
+  <text x="540" y="520" font-family="Arial, sans-serif" font-size="128" text-anchor="middle">&#x1F426;</text>
+
+  <!-- Answer label -->
+  <rect x="340" y="650" width="400" height="70" rx="35" ry="35" fill="white" opacity="0.25"/>
+  <text x="540" y="698" font-family="Arial, sans-serif" font-size="40" font-weight="bold" fill="white" text-anchor="middle">Kus &#x1F38A;</text>
+
+  <!-- Points earned badge -->
+  <rect x="380" y="760" width="320" height="60" rx="30" ry="30" fill="#FFD700" filter="url(#softShadow)"/>
+  <text x="540" y="800" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#2D3436" text-anchor="middle">+125 Puan &#x2B50;</text>
+
+  <!-- Answer options review -->
+  <text x="540" y="910" font-family="Arial, sans-serif" font-size="28" fill="white" text-anchor="middle" opacity="0.7">Secenekler</text>
+
+  <!-- Option 1 - Correct (green highlighted) -->
+  <rect x="90" y="950" width="430" height="120" rx="20" ry="20" fill="white" filter="url(#softShadow)"/>
+  <rect x="90" y="950" width="430" height="120" rx="20" ry="20" fill="#4CAF50" opacity="0.15"/>
+  <rect x="90" y="950" width="430" height="120" rx="20" ry="20" fill="none" stroke="#4CAF50" stroke-width="4"/>
+  <text x="260" y="1020" font-family="Arial, sans-serif" font-size="34" fill="#2D3436" text-anchor="middle">&#x1F426; Kus</text>
+  <circle cx="460" cy="1010" r="22" fill="#4CAF50"/>
+  <text x="460" y="1020" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">&#x2714;</text>
+
+  <!-- Option 2 -->
+  <rect x="560" y="950" width="430" height="120" rx="20" ry="20" fill="white" filter="url(#softShadow)" opacity="0.6"/>
+  <text x="775" y="1020" font-family="Arial, sans-serif" font-size="34" fill="#2D3436" text-anchor="middle" opacity="0.5">&#x1F33A; Cicek</text>
+
+  <!-- Option 3 -->
+  <rect x="90" y="1100" width="430" height="120" rx="20" ry="20" fill="white" filter="url(#softShadow)" opacity="0.6"/>
+  <text x="305" y="1170" font-family="Arial, sans-serif" font-size="34" fill="#2D3436" text-anchor="middle" opacity="0.5">&#x1F343; Yaprak</text>
+
+  <!-- Option 4 -->
+  <rect x="560" y="1100" width="430" height="120" rx="20" ry="20" fill="white" filter="url(#softShadow)" opacity="0.6"/>
+  <text x="775" y="1170" font-family="Arial, sans-serif" font-size="34" fill="#2D3436" text-anchor="middle" opacity="0.5">&#x2744;&#xFE0F; Kar</text>
+
+  <!-- Fun fact card -->
+  <rect x="90" y="1290" width="900" height="180" rx="20" ry="20" fill="white" filter="url(#cardShadow)" opacity="0.95"/>
+  <text x="160" y="1365" font-family="Arial, sans-serif" font-size="26" fill="#4CAF50" font-weight="bold">&#x1F4DA; Biliyor muydun?</text>
+  <text x="160" y="1410" font-family="Arial, sans-serif" font-size="24" fill="#2D3436" opacity="0.7">Dunya uzerinde 10.000'den fazla kus turu</text>
+  <text x="160" y="1445" font-family="Arial, sans-serif" font-size="24" fill="#2D3436" opacity="0.7">yasadigi bilinmektedir!</text>
+
+  <!-- Continue button -->
+  <rect x="240" y="1550" width="600" height="100" rx="50" ry="50" fill="url(#btnGrad)" filter="url(#btnShadow)"/>
+  <text x="540" y="1615" font-family="Arial, sans-serif" font-size="38" font-weight="bold" fill="white" text-anchor="middle">Devam &#x2192;</text>
+
+  <!-- Progress text -->
+  <text x="540" y="1720" font-family="Arial, sans-serif" font-size="28" fill="white" text-anchor="middle" opacity="0.6">3 / 10 soru tamamlandi</text>
+
+  <!-- Bottom navigation bar -->
+  <rect x="0" y="1790" width="1080" height="130" fill="white"/>
+  <rect x="0" y="1790" width="1080" height="1" fill="#E0E0E0"/>
+  <text x="200" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3E0;</text>
+  <text x="200" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Ana Sayfa</text>
+  <text x="540" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x1F3C6;</text>
+  <text x="540" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Skor</text>
+  <text x="880" y="1860" font-family="Arial, sans-serif" font-size="40" text-anchor="middle">&#x2699;&#xFE0F;</text>
+  <text x="880" y="1895" font-family="Arial, sans-serif" font-size="20" fill="#888" text-anchor="middle">Ayarlar</text>
+</svg>
