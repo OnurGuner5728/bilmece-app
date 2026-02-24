@@ -36,6 +36,8 @@ export function AdBanner({ size = 'banner' }: AdBannerProps) {
         size={BannerAdSize?.ANCHORED_ADAPTIVE_BANNER ?? 'ANCHORED_ADAPTIVE_BANNER'}
         requestOptions={{
           requestNonPersonalizedAdsOnly: true,
+          tagForChildDirectedTreatment: true,
+          maxAdContentRating: 'G',
         }}
       />
     </View>

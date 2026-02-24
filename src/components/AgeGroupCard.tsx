@@ -53,7 +53,7 @@ export function AgeGroupCard({ ageGroup, onPress, riddleCount, solvedCount }: Ag
           <View style={styles.badge}>
             <Text style={styles.badgeText}>
               {solvedCount !== undefined
-                ? `${solvedCount}/${riddleCount} cozuldu`
+                ? `${solvedCount}/${riddleCount} çözüldü`
                 : `${riddleCount} bilmece`}
             </Text>
           </View>

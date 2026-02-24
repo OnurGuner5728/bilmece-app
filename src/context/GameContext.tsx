@@ -19,7 +19,8 @@ type GameAction =
   | { type: 'INCREMENT_STREAK' }
   | { type: 'RESET_STREAK' }
   | { type: 'SELECT_ANSWER'; payload: AnswerOption }
-  | { type: 'CLEAR_ANSWER' };
+  | { type: 'CLEAR_ANSWER' }
+  | { type: 'SAVE_POSITION' };
 
 interface GameContextValue {
   state: GameState;
@@ -57,16 +58,22 @@ function gameReducer(
         ...state,
         game: { ...state.game, selectedAgeGroup: action.payload, currentRiddleIndex: 0 },
       };
-    case 'SET_DIFFICULTY':
+    case 'SET_DIFFICULTY': {
+      const key = `${state.game.selectedAgeGroup}_${action.payload}`;
+      const savedIndex = state.progress.lastPositions?.[key] ?? 0;
       return {
         ...state,
-        game: { ...state.game, selectedDifficulty: action.payload, currentRiddleIndex: 0 },
+        game: { ...state.game, selectedDifficulty: action.payload, currentRiddleIndex: savedIndex },
       };
-    case 'SET_CATEGORY':
+    }
+    case 'SET_CATEGORY': {
+      const catKey = action.payload ?? '';
+      const savedCatIndex = state.progress.lastPositions?.[`cat_${catKey}`] ?? 0;
       return {
         ...state,
-        game: { ...state.game, selectedCategory: action.payload, currentRiddleIndex: 0 },
+        game: { ...state.game, selectedCategory: action.payload, currentRiddleIndex: savedCatIndex },
       };
+    }
     case 'NEXT_RIDDLE':
       return {
         ...state,
@@ -177,6 +184,22 @@ function gameReducer(
           isCorrect: false,
         },
       };
+    case 'SAVE_POSITION': {
+      let posKey: string | null = null;
+      if (state.game.selectedAgeGroup && state.game.selectedDifficulty) {
+        posKey = `${state.game.selectedAgeGroup}_${state.game.selectedDifficulty}`;
+      } else if (state.game.selectedCategory) {
+        posKey = `cat_${state.game.selectedCategory}`;
+      }
+      if (!posKey) return state;
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          lastPositions: { ...(state.progress.lastPositions ?? {}), [posKey]: state.game.currentRiddleIndex },
+        },
+      };
+    }
     default:
       return state;
   }

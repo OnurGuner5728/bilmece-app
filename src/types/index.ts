@@ -26,6 +26,7 @@ export interface UserProgress {
   currentStreak: number;
   bestStreak: number;
   badges: Badge[];
+  lastPositions?: Record<string, number>;
 }
 
 export interface Badge {

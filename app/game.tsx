@@ -72,12 +72,21 @@ export default function GameScreen() {
     };
   }, []);
 
+  // Save position on unmount
+  useEffect(() => {
+    return () => {
+      dispatch({ type: 'SAVE_POSITION' });
+    };
+  }, []);
+
   // Interstitial ad setup (COPPA: requestNonPersonalizedAdsOnly)
   useEffect(() => {
     if (!InterstitialAd || Platform.OS === 'web') return;
     try {
       const interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_ID, {
         requestNonPersonalizedAdsOnly: true,
+        tagForChildDirectedTreatment: true,
+        maxAdContentRating: 'G',
       });
       const loadedUnsub = interstitial.addAdEventListener(AdEventType.LOADED, () => {
         interstitialLoadedRef.current = true;
@@ -198,6 +207,25 @@ export default function GameScreen() {
         />
 
         <View style={styles.content}>
+          {/* Navigation Bar */}
+          <View style={styles.navBar}>
+            <TouchableOpacity
+              style={[styles.navButton, state.currentRiddleIndex <= 0 && styles.navButtonDisabled]}
+              onPress={() => dispatch({ type: 'PREV_RIDDLE' })}
+              disabled={state.currentRiddleIndex <= 0}
+            >
+              <Text style={styles.navArrow}>{'\u25C0'}</Text>
+            </TouchableOpacity>
+            <Text style={styles.navCount}>{state.currentRiddleIndex + 1} / {filteredRiddles.length}</Text>
+            <TouchableOpacity
+              style={[styles.navButton, !(state.isAnswered || progress.solvedRiddles.includes(currentRiddle.id)) && styles.navButtonDisabled]}
+              onPress={() => dispatch({ type: 'NEXT_RIDDLE' })}
+              disabled={!(state.isAnswered || progress.solvedRiddles.includes(currentRiddle.id))}
+            >
+              <Text style={styles.navArrow}>{'\u25B6'}</Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Riddle Question */}
           <View style={styles.questionSection}>
             <Animated.View entering={FadeInDown.duration(400)} style={styles.questionCard}>
@@ -281,6 +309,34 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: spacing.xl,
+  },
+  navBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  navButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navButtonDisabled: {
+    opacity: 0.3,
+  },
+  navArrow: {
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  navCount: {
+    fontSize: fonts.sizes.sm,
+    fontWeight: fonts.weights.semiBold,
+    color: '#FFFFFF',
+    marginHorizontal: spacing.md,
   },
   content: { flex: 1, justifyContent: 'space-between' },
   questionSection: { paddingHorizontal: spacing.md },

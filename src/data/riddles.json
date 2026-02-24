@@ -2437,7 +2437,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         }
       ]
@@ -3181,7 +3181,7 @@
       "options": [
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -3337,7 +3337,7 @@
       "id": "bilmece_102",
       "question": "Kışın yatar, yazın kalkar.",
       "answer": "Soba",
-      "answerEmoji": "🏠",
+      "answerEmoji": "🔥",
       "answerImage": "soba",
       "hint": "Odayı ısıtır",
       "ageGroup": "7-9",
@@ -3356,7 +3356,7 @@
         },
         {
           "text": "Soba",
-          "emoji": "🏠",
+          "emoji": "🔥",
           "isCorrect": true
         },
         {
@@ -4313,7 +4313,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -4549,7 +4549,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         }
       ]
@@ -5039,7 +5039,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -7537,7 +7537,7 @@
       "options": [
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -9442,7 +9442,7 @@
       "id": "bilmece_287",
       "question": "Duvara çakar, resim asarsın.",
       "answer": "Çivi",
-      "answerEmoji": "📌",
+      "answerEmoji": "🔨",
       "answerImage": "çivi",
       "hint": "Çekiçle vurulur",
       "ageGroup": "7-9",
@@ -9456,7 +9456,7 @@
         },
         {
           "text": "Çivi",
-          "emoji": "📌",
+          "emoji": "🔨",
           "isCorrect": true
         },
         {
@@ -10309,7 +10309,7 @@
       "options": [
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -10545,7 +10545,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -10578,7 +10578,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -10847,7 +10847,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -10908,7 +10908,7 @@
         },
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -11653,7 +11653,7 @@
       "id": "bilmece_354",
       "question": "Bir yüzü aydınlık bir yüzü karanlık, gökyüzünde asılı.",
       "answer": "Ay",
-      "answerEmoji": "🌓",
+      "answerEmoji": "🌙",
       "answerImage": "ay",
       "hint": "Evreleri değişir",
       "ageGroup": "10-12",
@@ -11662,7 +11662,7 @@
       "options": [
         {
           "text": "Ay",
-          "emoji": "🌓",
+          "emoji": "🌙",
           "isCorrect": true
         },
         {
@@ -12421,7 +12421,7 @@
       "options": [
         {
           "text": "Parmak",
-          "emoji": "☝️",
+          "emoji": "🖐️",
           "isCorrect": false
         },
         {
@@ -12931,7 +12931,7 @@
         },
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         }
       ]
@@ -13482,7 +13482,7 @@
         },
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         },
         {
@@ -15019,7 +15019,7 @@
       "id": "bilmece_456",
       "question": "Basketbol potasına atılır.",
       "answer": "Top",
-      "answerEmoji": "🏀",
+      "answerEmoji": "⚽",
       "answerImage": "top",
       "hint": "Turuncu top",
       "ageGroup": "7-9",
@@ -15028,7 +15028,7 @@
       "options": [
         {
           "text": "Top",
-          "emoji": "🏀",
+          "emoji": "⚽",
           "isCorrect": true
         },
         {
@@ -15250,7 +15250,7 @@
       "id": "bilmece_463",
       "question": "Atarsın havaya, geri gelir yere.",
       "answer": "Top",
-      "answerEmoji": "🏐",
+      "answerEmoji": "⚽",
       "answerImage": "top",
       "hint": "Yuvarlak oyuncak",
       "ageGroup": "4-6",
@@ -15259,7 +15259,7 @@
       "options": [
         {
           "text": "Top",
-          "emoji": "🏐",
+          "emoji": "⚽",
           "isCorrect": true
         },
         {
@@ -15340,7 +15340,7 @@
         },
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         }
       ]
@@ -15877,7 +15877,7 @@
       "id": "bilmece_482",
       "question": "Tepesinde yıldız, yılbaşında süslenir.",
       "answer": "Çam ağacı",
-      "answerEmoji": "🎄",
+      "answerEmoji": "🌲",
       "answerImage": "çam_ağacı",
       "hint": "Yılbaşı ağacı",
       "ageGroup": "4-6",
@@ -15891,7 +15891,7 @@
         },
         {
           "text": "Çam ağacı",
-          "emoji": "🎄",
+          "emoji": "🌲",
           "isCorrect": true
         },
         {
@@ -16273,7 +16273,7 @@
       "id": "bilmece_494",
       "question": "Kırmızı gövde, yeşil baş, acıdır.",
       "answer": "Turp",
-      "answerEmoji": "🌶️",
+      "answerEmoji": "🌱",
       "answerImage": "turp",
       "hint": "Kök sebze",
       "ageGroup": "7-9",
@@ -16297,7 +16297,7 @@
         },
         {
           "text": "Turp",
-          "emoji": "🌶️",
+          "emoji": "🌱",
           "isCorrect": true
         }
       ]
@@ -16480,7 +16480,7 @@
       "options": [
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         },
         {
@@ -16589,7 +16589,7 @@
         },
         {
           "text": "Mide",
-          "emoji": "🫃",
+          "emoji": "🫁",
           "isCorrect": false
         },
         {
@@ -16853,7 +16853,7 @@
         },
         {
           "text": "Bilek",
-          "emoji": "✋",
+          "emoji": "🤚",
           "isCorrect": false
         },
         {
@@ -16867,7 +16867,7 @@
       "id": "bilmece_512",
       "question": "Bir ipek halı, serilir toplanır, altında gizli hazine.",
       "answer": "Göz kapağı",
-      "answerEmoji": "😌",
+      "answerEmoji": "👁️",
       "answerImage": "göz_kapağı",
       "hint": "Uyurken kapanır",
       "ageGroup": "10-12",
@@ -16881,7 +16881,7 @@
         },
         {
           "text": "Göz kapağı",
-          "emoji": "😌",
+          "emoji": "👁️",
           "isCorrect": true
         },
         {
@@ -16909,7 +16909,7 @@
       "options": [
         {
           "text": "Mide",
-          "emoji": "🫃",
+          "emoji": "🫁",
           "isCorrect": false
         },
         {
@@ -17008,7 +17008,7 @@
       "options": [
         {
           "text": "Bağırsak",
-          "emoji": "🫘",
+          "emoji": "🫁",
           "isCorrect": false
         },
         {
@@ -17018,7 +17018,7 @@
         },
         {
           "text": "Sinir",
-          "emoji": "⚡",
+          "emoji": "🧠",
           "isCorrect": false
         },
         {
@@ -17041,7 +17041,7 @@
       "options": [
         {
           "text": "Omuz",
-          "emoji": "🤷",
+          "emoji": "💪",
           "isCorrect": false
         },
         {
@@ -17051,7 +17051,7 @@
         },
         {
           "text": "Karın",
-          "emoji": "🫃",
+          "emoji": "🤰",
           "isCorrect": false
         },
         {
@@ -17107,7 +17107,7 @@
       "options": [
         {
           "text": "Sırt",
-          "emoji": "🔙",
+          "emoji": "🧍",
           "isCorrect": false
         },
         {
@@ -17117,7 +17117,7 @@
         },
         {
           "text": "Omuz",
-          "emoji": "🤷",
+          "emoji": "💪",
           "isCorrect": false
         },
         {
@@ -17178,7 +17178,7 @@
         },
         {
           "text": "Mide",
-          "emoji": "🫃",
+          "emoji": "🫁",
           "isCorrect": false
         },
         {
@@ -17221,7 +17221,7 @@
         },
         {
           "text": "Sırt",
-          "emoji": "🔙",
+          "emoji": "🧍",
           "isCorrect": false
         }
       ]
@@ -17287,7 +17287,7 @@
         },
         {
           "text": "Omuz",
-          "emoji": "🤷",
+          "emoji": "💪",
           "isCorrect": false
         }
       ]
@@ -17447,12 +17447,12 @@
         },
         {
           "text": "Denizaltı",
-          "emoji": "🚤",
+          "emoji": "🚢",
           "isCorrect": false
         },
         {
           "text": "Sal",
-          "emoji": "🛟",
+          "emoji": "🛶",
           "isCorrect": false
         }
       ]
@@ -17513,7 +17513,7 @@
         },
         {
           "text": "Kamyon",
-          "emoji": "🚛",
+          "emoji": "🚚",
           "isCorrect": false
         },
         {
@@ -17541,7 +17541,7 @@
         },
         {
           "text": "Kamyon",
-          "emoji": "🚛",
+          "emoji": "🚚",
           "isCorrect": false
         },
         {
@@ -17617,7 +17617,7 @@
         },
         {
           "text": "Kamyon",
-          "emoji": "🚛",
+          "emoji": "🚚",
           "isCorrect": false
         }
       ]
@@ -17772,7 +17772,7 @@
         },
         {
           "text": "Füze",
-          "emoji": "💣",
+          "emoji": "🚀",
           "isCorrect": false
         },
         {
@@ -17923,7 +17923,7 @@
       "id": "bilmece_544",
       "question": "Suyun altında gizlice yol alır, periskopla bakar.",
       "answer": "Denizaltı",
-      "answerEmoji": "🛥️",
+      "answerEmoji": "🚢",
       "answerImage": "denizaltı",
       "hint": "Suyun altında seyreder",
       "ageGroup": "10-12",
@@ -17937,12 +17937,12 @@
         },
         {
           "text": "Denizaltı",
-          "emoji": "🛥️",
+          "emoji": "🚢",
           "isCorrect": true
         },
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         },
         {
@@ -17975,7 +17975,7 @@
         },
         {
           "text": "Kayık",
-          "emoji": "🛶",
+          "emoji": "⛵",
           "isCorrect": false
         },
         {
@@ -18008,7 +18008,7 @@
         },
         {
           "text": "Yürüyen merdiven",
-          "emoji": "🏬",
+          "emoji": "🛗",
           "isCorrect": false
         },
         {

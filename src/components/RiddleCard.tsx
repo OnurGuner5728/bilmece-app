@@ -34,12 +34,12 @@ export function RiddleCard({ riddle, showHint, onToggleHint, index, total }: Rid
 
       {showHint ? (
         <Animated.View entering={FadeInUp.duration(300)} style={styles.hintContainer}>
-          <Text style={styles.hintLabel}>Ipucu:</Text>
+          <Text style={styles.hintLabel}>İpucu:</Text>
           <Text style={styles.hintText}>{riddle.hint}</Text>
         </Animated.View>
       ) : (
         <TouchableOpacity style={styles.hintButton} onPress={onToggleHint}>
-          <Text style={styles.hintButtonText}>{'\uD83D\uDCA1'} Ipucu Goster</Text>
+          <Text style={styles.hintButtonText}>{'\uD83D\uDCA1'} İpucu Göster</Text>
         </TouchableOpacity>
       )}
     </Animated.View>

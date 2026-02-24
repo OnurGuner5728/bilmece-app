@@ -42,7 +42,7 @@ export function ScoreDisplay({ totalScore, currentStreak, solvedCount }: ScoreDi
       <View style={styles.divider} />
       <View style={styles.statItem}>
         <Text style={styles.statValue}>{'\u2705'} {solvedCount}</Text>
-        <Text style={styles.statLabel}>Cozulen</Text>
+        <Text style={styles.statLabel}>Çözülen</Text>
       </View>
     </Animated.View>
   );

@@ -51,7 +51,7 @@ export default function HomeScreen() {
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <Text style={styles.title}>Bilmecelerce</Text>
-            <Text style={styles.subtitle}>Yas grubunu sec ve oynamaya basla!</Text>
+            <Text style={styles.subtitle}>Yaş grubunu seç ve oynamaya başla!</Text>
           </View>
 
           <ScoreDisplay
@@ -78,13 +78,13 @@ export default function HomeScreen() {
                     {dailyRiddle.answerEmoji}
                   </Animated.Text>
                   <View style={styles.dailyBadge}>
-                    <Text style={styles.dailyBadgeText}>Gunun Bilmecesi</Text>
+                    <Text style={styles.dailyBadgeText}>Günün Bilmecesi</Text>
                   </View>
                 </View>
                 <Text style={styles.dailyQuestion} numberOfLines={2}>
                   {dailyRiddle.question}
                 </Text>
-                <Text style={styles.dailyTap}>Cevaplamak icin dokun &rarr;</Text>
+                <Text style={styles.dailyTap}>Cevaplamak için dokun &rarr;</Text>
               </LinearGradient>
             </TouchableOpacity>
           </Animated.View>
@@ -118,7 +118,7 @@ export default function HomeScreen() {
           </Animated.View>
 
           {/* Age Group Cards */}
-          <Text style={styles.sectionTitle}>Yas Gruplari</Text>
+          <Text style={styles.sectionTitle}>Yaş Grupları</Text>
           <View style={styles.cards}>
             {AGE_GROUPS.map((ag) => {
               const total = RiddleService.getRiddlesByAgeGroup(ag).length;

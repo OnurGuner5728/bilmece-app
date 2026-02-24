@@ -113,7 +113,7 @@ export default function SettingsScreen() {
               },
             });
             setResetting(false);
-            Alert.alert('Ba\u015far\u0131ld\u0131', 'T\u00fcm veriler s\u0131f\u0131rland\u0131.');
+            Alert.alert('Ba\u015far\u0131l\u0131', 'T\u00fcm veriler s\u0131f\u0131rland\u0131.');
           },
         },
       ]
@@ -150,7 +150,7 @@ export default function SettingsScreen() {
               />
             </View>
             <View style={styles.row}>
-              <Text style={styles.label}>Arka Plan M\u00fczigi</Text>
+              <Text style={styles.label}>Arka Plan M\u00fczi\u011fi</Text>
               <Switch
                 value={settings.musicEnabled}
                 onValueChange={() => settingsDispatch({ type: 'TOGGLE_MUSIC' })}

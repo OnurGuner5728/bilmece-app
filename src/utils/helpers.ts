@@ -2,9 +2,9 @@ import { AgeGroup, Difficulty } from '../types';
 
 export function getAgeGroupLabel(ageGroup: AgeGroup): string {
   const labels: Record<AgeGroup, string> = {
-    '4-6': '4-6 Yas',
-    '7-9': '7-9 Yas',
-    '10-12': '10-12 Yas',
+    '4-6': '4-6 Yaş',
+    '7-9': '7-9 Yaş',
+    '10-12': '10-12 Yaş',
   };
   return labels[ageGroup];
 }
@@ -55,9 +55,9 @@ export function formatScore(score: number): string {
 
 export function getTimeGreeting(): string {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Gunaydin';
-  if (hour < 18) return 'Iyi gunler';
-  return 'Iyi aksamlar';
+  if (hour < 12) return 'Günaydın';
+  if (hour < 18) return 'İyi günler';
+  return 'İyi akşamlar';
 }
 
 export function generateSessionId(): string {
