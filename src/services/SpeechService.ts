@@ -1,99 +1,120 @@
+import { Audio } from 'expo-av';
 import * as Speech from 'expo-speech';
-import { Platform } from 'react-native';
 import { AgeGroup } from '../types';
 
-// Yas grubuna gore konusma hizi — cocuklar icin daha yavas ve net
-const SPEECH_RATES: Record<AgeGroup, number> = {
-    '4-6': 0.72,   // Cok kucuk cocuklar: belirgin yavas ve net
-    '7-9': 0.82,   // Okul cagi: rahat ve takip edilebilir
-    '10-12': 0.92, // Buyuk cocuklar: dogal konusma temposuna yakin
+/**
+ * Bilmecelerce SpeechService
+ *
+ * Öncelik:
+ * 1. Pre-generated MP3 (edge-tts — tr-TR-EmelNeural, gerçek insan sesinden eğitilmiş Neural TTS)
+ *    → GitHub CDN'den stream edilir, her cihazda AYNI ses, tutarlı ve doğal
+ * 2. Fallback: expo-speech (cihaz native TTS, internet yoksa)
+ */
+
+const AUDIO_BASE_URL =
+  'https://raw.githubusercontent.com/OnurGuner5728/bilmece-app/master/audio/';
+
+// Yaş grubuna göre expo-av oynatma hızı
+const PLAYBACK_RATE: Record<AgeGroup, number> = {
+  '4-6': 0.82,  // Yavaş, net — küçük çocuklar için
+  '7-9': 0.91,  // Rahat tempo
+  '10-12': 1.0, // Normal hız
 };
 
-// Yas grubuna gore ses tonu — yuksek pitch sicak ve cocuk dostu
-const SPEECH_PITCH: Record<AgeGroup, number> = {
-    '4-6': 1.25,   // Neseli ve canli ton
-    '7-9': 1.15,   // Sicak ve dostane ton
-    '10-12': 1.05, // Dogal ama biraz vurgulanmis ton
-};
+// expo-speech fallback için
+const FALLBACK_RATE: Record<AgeGroup, number> = { '4-6': 0.72, '7-9': 0.82, '10-12': 0.92 };
+const FALLBACK_PITCH: Record<AgeGroup, number> = { '4-6': 1.25, '7-9': 1.15, '10-12': 1.05 };
 
-// Module-level cache for the best Turkish voice
-let cachedVoice: Speech.Voice | null = null;
-let voiceResolved = false;
+let currentSound: Audio.Sound | null = null;
+let audioConfigured = false;
 
-async function findBestTurkishVoice(): Promise<Speech.Voice | null> {
-    if (voiceResolved) return cachedVoice;
+async function configureAudio(): Promise<void> {
+  if (audioConfigured) return;
+  try {
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: false,
+    });
+    audioConfigured = true;
+  } catch {}
+}
 
+async function stopCurrentSound(): Promise<void> {
+  if (currentSound) {
     try {
-        const voices = await Speech.getAvailableVoicesAsync();
-        const turkishVoices = voices.filter(
-            (v) => v.language === 'tr-TR' || v.language === 'tr_TR' || v.language.startsWith('tr'),
-        );
+      await currentSound.stopAsync();
+      await currentSound.unloadAsync();
+    } catch {}
+    currentSound = null;
+  }
+}
 
-        if (turkishVoices.length === 0) {
-            voiceResolved = true;
-            return null;
-        }
-
-        let selected: Speech.Voice | null = null;
-
-        if (Platform.OS === 'android') {
-            // Prefer enhanced/network voices with tr-TR or tr_TR identifier
-            const enhanced = turkishVoices.filter(
-                (v) =>
-                    (v.identifier.includes('tr-TR') || v.identifier.includes('tr_TR')) &&
-                    (v.quality === Speech.VoiceQuality.Enhanced || v.quality === Speech.VoiceQuality.Default),
-            );
-
-            // Among enhanced, prefer network voices
-            const network = enhanced.find((v) => v.name.toLowerCase().includes('network'));
-            selected = network ?? enhanced[0] ?? null;
-        } else if (Platform.OS === 'ios') {
-            // Prefer Yelda or Siri Turkish voice
-            selected =
-                turkishVoices.find((v) => v.name.includes('Yelda')) ??
-                turkishVoices.find((v) => v.name.includes('Siri')) ??
-                null;
-        }
-
-        // Fallback: any Turkish voice
-        if (!selected) {
-            selected = turkishVoices[0];
-        }
-
-        cachedVoice = selected;
-    } catch {
-        // getAvailableVoicesAsync failed — silently fall back to no specific voice
-        cachedVoice = null;
+async function playRemoteAudio(audioId: string, ageGroup: AgeGroup): Promise<boolean> {
+  const url = `${AUDIO_BASE_URL}${audioId}.mp3`;
+  await configureAudio();
+  const { sound } = await Audio.Sound.createAsync(
+    { uri: url },
+    {
+      shouldPlay: false,
+      rate: PLAYBACK_RATE[ageGroup],
+      pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
     }
+  );
+  currentSound = sound;
+  sound.setOnPlaybackStatusUpdate((status) => {
+    if (status.isLoaded && (status as any).didJustFinish) {
+      stopCurrentSound();
+    }
+  });
+  await sound.playAsync();
+  return true;
+}
 
-    voiceResolved = true;
-    return cachedVoice;
+function nativeFallback(text: string, ageGroup: AgeGroup): void {
+  try {
+    Speech.stop();
+    Speech.speak(text, {
+      language: 'tr-TR',
+      rate: FALLBACK_RATE[ageGroup],
+      pitch: FALLBACK_PITCH[ageGroup],
+    });
+  } catch {}
 }
 
 export const SpeechService = {
-    async speak(text: string, ageGroup: AgeGroup = '7-9'): Promise<void> {
-        Speech.stop();
+  /**
+   * @param text      Söylenecek metin (fallback için)
+   * @param ageGroup  Yaş grubu (hız ayarı için)
+   * @param audioId   Pre-generated ses ID'si (ör: "bilmece_001", "tebrikler", "yanlis")
+   *                  Belirtilmezse veya yüklenemezse native TTS devreye girer.
+   */
+  async speak(text: string, ageGroup: AgeGroup = '7-9', audioId?: string): Promise<void> {
+    await stopCurrentSound();
 
-        const voice = await findBestTurkishVoice();
+    if (audioId) {
+      try {
+        await playRemoteAudio(audioId, ageGroup);
+        return;
+      } catch {
+        // Ses yüklenemedi — fallback'e geç
+      }
+    }
 
-        const options: Speech.SpeechOptions = {
-            language: 'tr-TR',
-            rate: SPEECH_RATES[ageGroup],
-            pitch: SPEECH_PITCH[ageGroup],
-        };
+    nativeFallback(text, ageGroup);
+  },
 
-        if (voice) {
-            options.voice = voice.identifier;
-        }
+  async stop(): Promise<void> {
+    await stopCurrentSound();
+    try { Speech.stop(); } catch {}
+  },
 
-        Speech.speak(text, options);
-    },
-
-    stop(): void {
-        Speech.stop();
-    },
-
-    async isSpeaking(): Promise<boolean> {
-        return Speech.isSpeakingAsync();
-    },
+  async isSpeaking(): Promise<boolean> {
+    if (currentSound) {
+      try {
+        const status = await currentSound.getStatusAsync();
+        return status.isLoaded && (status as any).isPlaying;
+      } catch {}
+    }
+    try { return Speech.isSpeakingAsync(); } catch { return false; }
+  },
 };

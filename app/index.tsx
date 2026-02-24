@@ -10,6 +10,7 @@ import { AdBanner } from '../src/components/AdBanner';
 import { useGame } from '../src/context/GameContext';
 import { RiddleService, CATEGORY_META } from '../src/services/RiddleService';
 import { AgeGroup } from '../src/types';
+import { EmojiImage } from '../src/components/EmojiImage';
 import { colors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing, borderRadius } from '../src/theme/spacing';
@@ -74,9 +75,9 @@ export default function HomeScreen() {
                 style={styles.dailyGradient}
               >
                 <View style={styles.dailyHeader}>
-                  <Animated.Text entering={BounceIn.delay(300).duration(600)} style={styles.dailyEmoji}>
-                    {dailyRiddle.answerEmoji}
-                  </Animated.Text>
+                  <Animated.View entering={BounceIn.delay(300).duration(600)}>
+                    <EmojiImage emoji={dailyRiddle.answerEmoji} size={48} />
+                  </Animated.View>
                   <View style={styles.dailyBadge}>
                     <Text style={styles.dailyBadgeText}>Günün Bilmecesi</Text>
                   </View>
@@ -107,7 +108,7 @@ export default function HomeScreen() {
                       onPress={() => handleCategorySelect(cat)}
                       activeOpacity={0.8}
                     >
-                      <Text style={styles.categoryEmoji}>{meta?.emoji}</Text>
+                      {meta?.emoji ? <EmojiImage emoji={meta.emoji} size={28} style={styles.categoryEmojiImage} /> : null}
                       <Text style={styles.categoryLabel}>{meta?.label}</Text>
                       <Text style={styles.categoryCount}>{count}</Text>
                     </TouchableOpacity>
@@ -144,13 +145,19 @@ export default function HomeScreen() {
               style={styles.footerButton}
               onPress={() => router.push('/score')}
             >
-              <Text style={styles.footerButtonText}>{'\uD83C\uDFC6'} Skor Tablosu</Text>
+              <View style={styles.footerButtonContent}>
+                <EmojiImage emoji={'\uD83C\uDFC6'} size={20} />
+                <Text style={styles.footerButtonText}>Skor Tablosu</Text>
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.footerButton}
               onPress={() => router.push('/settings')}
             >
-              <Text style={styles.footerButtonText}>{'\u2699\uFE0F'} Ayarlar</Text>
+              <View style={styles.footerButtonContent}>
+                <EmojiImage emoji={'\u2699\uFE0F'} size={20} />
+                <Text style={styles.footerButtonText}>Ayarlar</Text>
+              </View>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -206,9 +213,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  dailyEmoji: {
-    fontSize: 48,
-  },
+  dailyEmojiWrap: {},
   dailyBadge: {
     backgroundColor: 'rgba(255,255,255,0.3)',
     paddingHorizontal: spacing.md,
@@ -258,8 +263,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  categoryEmoji: {
-    fontSize: 28,
+  categoryEmojiImage: {
     marginBottom: spacing.xs,
   },
   categoryLabel: {
@@ -290,6 +294,11 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     borderRadius: 12,
     alignItems: 'center',
+  },
+  footerButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   footerButtonText: {
     fontSize: fonts.sizes.md,

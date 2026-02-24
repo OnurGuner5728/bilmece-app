@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { EmojiImage } from './EmojiImage';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Riddle } from '../types';
 import { colors } from '../theme/colors';
@@ -39,7 +40,10 @@ export function RiddleCard({ riddle, showHint, onToggleHint, index, total }: Rid
         </Animated.View>
       ) : (
         <TouchableOpacity style={styles.hintButton} onPress={onToggleHint}>
-          <Text style={styles.hintButtonText}>{'\uD83D\uDCA1'} İpucu Göster</Text>
+          <View style={styles.hintButtonContent}>
+            <EmojiImage emoji={'\uD83D\uDCA1'} size={18} />
+            <Text style={styles.hintButtonText}>İpucu Göster</Text>
+          </View>
         </TouchableOpacity>
       )}
     </Animated.View>
@@ -120,6 +124,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  hintButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   hintButtonText: {
     fontSize: fonts.sizes.md,

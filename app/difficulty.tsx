@@ -12,6 +12,7 @@ import { colors, difficultyColors, ageGroupColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { borderRadius, spacing } from '../src/theme/spacing';
 import { getDifficultyLabel, getDifficultyEmoji } from '../src/utils/helpers';
+import { EmojiImage } from '../src/components/EmojiImage';
 
 const DIFFICULTIES: Difficulty[] = ['kolay', 'orta', 'zor'];
 
@@ -54,7 +55,11 @@ export default function DifficultyScreen() {
                   activeOpacity={0.8}
                 >
                   <View style={styles.cardContent}>
-                    <Text style={styles.emoji}>{getDifficultyEmoji(diff)}</Text>
+                    <View style={styles.emojiRow}>
+                      {[...getDifficultyEmoji(diff)].map((e, i) => (
+                        <EmojiImage key={i} emoji={e} size={32} />
+                      ))}
+                    </View>
                     <View style={styles.cardText}>
                       <Text style={styles.cardTitle}>{getDifficultyLabel(diff)}</Text>
                       <Text style={styles.cardSubtitle}>
@@ -120,8 +125,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  emoji: {
-    fontSize: 32,
+  emojiRow: {
+    flexDirection: 'row',
     marginRight: spacing.md,
   },
   cardText: {

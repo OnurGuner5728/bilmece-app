@@ -56,7 +56,7 @@ export default function GameScreen() {
     const currentRiddle = filteredRiddles[state.currentRiddleIndex];
     if (currentRiddle && settings.soundEnabled && state.selectedAgeGroup) {
       const timer = setTimeout(() => {
-        SpeechService.speak(currentRiddle.question, state.selectedAgeGroup!);
+        SpeechService.speak(currentRiddle.question, state.selectedAgeGroup!, currentRiddle.id);
       }, 500);
       return () => {
         clearTimeout(timer);
@@ -156,7 +156,7 @@ export default function GameScreen() {
       dispatch({ type: 'INCREMENT_STREAK' });
 
       if (settings.soundEnabled) {
-        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, state.selectedAgeGroup!);
+        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, state.selectedAgeGroup!, 'tebrikler');
       }
 
       // Auto advance after 2 seconds
@@ -172,7 +172,7 @@ export default function GameScreen() {
       // Wrong answer
       dispatch({ type: 'RESET_STREAK' });
       if (settings.soundEnabled) {
-        SpeechService.speak('Yanlış! Tekrar dene.', state.selectedAgeGroup!);
+        SpeechService.speak('Yanlış! Tekrar dene.', state.selectedAgeGroup!, 'yanlis');
       }
       // Allow retry after 1 second
       autoAdvanceTimer.current = setTimeout(() => {
@@ -183,7 +183,7 @@ export default function GameScreen() {
 
   const handleSpeakRiddle = () => {
     if (state.selectedAgeGroup) {
-      SpeechService.speak(currentRiddle.question, state.selectedAgeGroup);
+      SpeechService.speak(currentRiddle.question, state.selectedAgeGroup, currentRiddle.id);
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { EmojiImage } from './EmojiImage';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -31,17 +32,26 @@ export function ScoreDisplay({ totalScore, currentStreak, solvedCount }: ScoreDi
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.statItem}>
-        <Text style={styles.statValue}>{'\u2B50'} {totalScore}</Text>
+        <View style={styles.statRow}>
+          <EmojiImage emoji={'\u2B50'} size={18} />
+          <Text style={styles.statValue}>{totalScore}</Text>
+        </View>
         <Text style={styles.statLabel}>Puan</Text>
       </View>
       <View style={styles.divider} />
       <View style={styles.statItem}>
-        <Text style={styles.statValue}>{'\uD83D\uDD25'} {currentStreak}</Text>
+        <View style={styles.statRow}>
+          <EmojiImage emoji={'\uD83D\uDD25'} size={18} />
+          <Text style={styles.statValue}>{currentStreak}</Text>
+        </View>
         <Text style={styles.statLabel}>Seri</Text>
       </View>
       <View style={styles.divider} />
       <View style={styles.statItem}>
-        <Text style={styles.statValue}>{'\u2705'} {solvedCount}</Text>
+        <View style={styles.statRow}>
+          <EmojiImage emoji={'\u2705'} size={18} />
+          <Text style={styles.statValue}>{solvedCount}</Text>
+        </View>
         <Text style={styles.statLabel}>Çözülen</Text>
       </View>
     </Animated.View>
@@ -65,6 +75,11 @@ const styles = StyleSheet.create({
   statItem: {
     flex: 1,
     alignItems: 'center',
+  },
+  statRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   statValue: {
     fontSize: fonts.sizes.md,

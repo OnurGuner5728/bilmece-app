@@ -8,6 +8,7 @@ import { RiddleService } from '../src/services/RiddleService';
 import { ScoreService } from '../src/services/ScoreService';
 import { AdBanner } from '../src/components/AdBanner';
 import { AgeGroup } from '../src/types';
+import { EmojiImage } from '../src/components/EmojiImage';
 import { colors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { borderRadius, spacing } from '../src/theme/spacing';
@@ -41,24 +42,24 @@ export default function ScoreScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           <Animated.View entering={FadeInUp.duration(500)} style={styles.header}>
-            <Text style={styles.totalEmoji}>{'\u2B50'}</Text>
+            <EmojiImage emoji={'\u2B50'} size={48} style={styles.totalEmojiImage} />
             <Text style={styles.totalScore}>{progress.totalScore}</Text>
             <Text style={styles.totalLabel}>Toplam Puan</Text>
           </Animated.View>
 
           <View style={styles.statsGrid}>
             <View style={styles.statCard}>
-              <Text style={styles.statEmoji}>{'\u2705'}</Text>
+              <EmojiImage emoji={'\u2705'} size={24} style={styles.statEmojiImage} />
               <Text style={styles.statValue}>{progress.solvedRiddles.length}</Text>
               <Text style={styles.statLabel}>Çözülen Bilmece</Text>
             </View>
             <View style={styles.statCard}>
-              <Text style={styles.statEmoji}>{'\uD83C\uDFC6'}</Text>
+              <EmojiImage emoji={'\uD83C\uDFC6'} size={24} style={styles.statEmojiImage} />
               <Text style={styles.statValue}>{progress.bestStreak}</Text>
               <Text style={styles.statLabel}>En İyi Seri</Text>
             </View>
             <View style={styles.statCard}>
-              <Text style={styles.statEmoji}>{'\uD83D\uDD25'}</Text>
+              <EmojiImage emoji={'\uD83D\uDD25'} size={24} style={styles.statEmojiImage} />
               <Text style={styles.statValue}>{progress.currentStreak}</Text>
               <Text style={styles.statLabel}>Mevcut Seri</Text>
             </View>
@@ -74,15 +75,13 @@ export default function ScoreScreen() {
                     key={badge.id}
                     style={[styles.badgeCard, !isUnlocked && styles.badgeLocked]}
                   >
-                    <Text style={[styles.badgeEmoji, !isUnlocked && styles.badgeEmojiLocked]}>
-                      {badge.emoji}
-                    </Text>
+                    <EmojiImage emoji={badge.emoji} size={36} style={[styles.badgeEmojiImage, !isUnlocked && styles.badgeEmojiLocked]} />
                     <Text style={[styles.badgeName, !isUnlocked && styles.badgeNameLocked]}>
                       {badge.name}
                     </Text>
                     <Text style={styles.badgeDesc}>{badge.description}</Text>
                     {!isUnlocked && (
-                      <Text style={styles.lockIcon}>{'\uD83D\uDD12'}</Text>
+                      <EmojiImage emoji={'\uD83D\uDD12'} size={14} style={styles.lockIcon} />
                     )}
                   </View>
                 );
@@ -136,8 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.xl,
   },
-  totalEmoji: {
-    fontSize: 48,
+  totalEmojiImage: {
     marginBottom: spacing.xs,
   },
   totalScore: {
@@ -167,8 +165,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 4,
   },
-  statEmoji: {
-    fontSize: 24,
+  statEmojiImage: {
     marginBottom: spacing.xs,
   },
   statValue: {
@@ -214,8 +211,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     backgroundColor: '#F5F5F5',
   },
-  badgeEmoji: {
-    fontSize: 36,
+  badgeEmojiImage: {
     marginBottom: spacing.xs,
   },
   badgeEmojiLocked: {
@@ -240,7 +236,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: spacing.xs,
     right: spacing.xs,
-    fontSize: 14,
   },
   progressSection: {
     marginTop: spacing.xl,

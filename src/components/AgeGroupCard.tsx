@@ -11,6 +11,7 @@ import { ageGroupColors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 import { borderRadius, spacing } from '../theme/spacing';
 import { getAgeGroupLabel, getAgeGroupEmoji } from '../utils/helpers';
+import { EmojiImage } from './EmojiImage';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -47,7 +48,7 @@ export function AgeGroupCard({ ageGroup, onPress, riddleCount, solvedCount }: Ag
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
-        <Text style={styles.emoji}>{getAgeGroupEmoji(ageGroup)}</Text>
+        <EmojiImage emoji={getAgeGroupEmoji(ageGroup)} size={48} style={styles.emojiImage} />
         <Text style={styles.label}>{getAgeGroupLabel(ageGroup)}</Text>
         {riddleCount !== undefined && (
           <View style={styles.badge}>
@@ -80,8 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 140,
   },
-  emoji: {
-    fontSize: 48,
+  emojiImage: {
     marginBottom: spacing.sm,
   },
   label: {

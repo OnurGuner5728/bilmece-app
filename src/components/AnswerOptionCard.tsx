@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
+import { EmojiImage } from './EmojiImage';
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -73,7 +74,7 @@ export function AnswerOptionCard({
             disabled={disabled}
             activeOpacity={0.7}
         >
-            <Text style={styles.emoji}>{option.emoji}</Text>
+            <EmojiImage emoji={option.emoji} size={48} style={styles.emojiImage} />
             <Text style={styles.text} numberOfLines={1}>{option.text}</Text>
         </AnimatedTouchable>
     );
@@ -111,8 +112,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E8F5E9',
         opacity: 0.7,
     },
-    emoji: {
-        fontSize: 48,
+    emojiImage: {
         marginBottom: spacing.xs,
     },
     text: {

@@ -59,7 +59,7 @@ export default function CategoryScreen() {
     if (currentRiddle && settings.soundEnabled) {
       const ageGroup = currentRiddle.ageGroup;
       const timer = setTimeout(() => {
-        SpeechService.speak(currentRiddle.question, ageGroup);
+        SpeechService.speak(currentRiddle.question, ageGroup, currentRiddle.id);
       }, 500);
       return () => {
         clearTimeout(timer);
@@ -157,7 +157,7 @@ export default function CategoryScreen() {
       dispatch({ type: 'INCREMENT_STREAK' });
 
       if (settings.soundEnabled) {
-        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, currentRiddle.ageGroup);
+        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, currentRiddle.ageGroup, 'tebrikler');
       }
 
       if (!isLast) {
@@ -171,7 +171,7 @@ export default function CategoryScreen() {
     } else {
       dispatch({ type: 'RESET_STREAK' });
       if (settings.soundEnabled) {
-        SpeechService.speak('Yanlış! Tekrar dene.', currentRiddle.ageGroup);
+        SpeechService.speak('Yanlış! Tekrar dene.', currentRiddle.ageGroup, 'yanlis');
       }
       autoAdvanceTimer.current = setTimeout(() => {
         dispatch({ type: 'CLEAR_ANSWER' });
@@ -180,7 +180,7 @@ export default function CategoryScreen() {
   };
 
   const handleSpeakRiddle = () => {
-    SpeechService.speak(currentRiddle.question, currentRiddle.ageGroup);
+    SpeechService.speak(currentRiddle.question, currentRiddle.ageGroup, currentRiddle.id);
   };
 
   const handleToggleHint = () => {

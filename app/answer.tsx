@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { BounceIn, FadeIn, ZoomIn } from 'react-native-reanimated';
 import { AdBanner } from '../src/components/AdBanner';
 import { Button } from '../src/components/Button';
+import { EmojiImage } from '../src/components/EmojiImage';
 import { useGame } from '../src/context/GameContext';
 import { RiddleService } from '../src/services/RiddleService';
 import { ScoreService } from '../src/services/ScoreService';
@@ -32,7 +33,7 @@ export default function AnswerScreen() {
 
   useEffect(() => {
     if (currentRiddle && settings.soundEnabled && state.selectedAgeGroup) {
-      SpeechService.speak(currentRiddle.answer, state.selectedAgeGroup);
+      SpeechService.speak(currentRiddle.answer, state.selectedAgeGroup!);
     }
     return () => {
       SpeechService.stop();
@@ -66,9 +67,9 @@ export default function AnswerScreen() {
     <LinearGradient colors={gradientColors} style={styles.gradient}>
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.content}>
-          <Animated.Text entering={BounceIn.duration(800)} style={styles.emoji}>
-            {currentRiddle.answerEmoji}
-          </Animated.Text>
+          <Animated.View entering={BounceIn.duration(800)}>
+            <EmojiImage emoji={currentRiddle.answerEmoji} size={100} />
+          </Animated.View>
 
           <Animated.Text entering={FadeIn.delay(400).duration(500)} style={styles.answer}>
             {currentRiddle.answer}
@@ -81,7 +82,13 @@ export default function AnswerScreen() {
           </Animated.View>
 
           <Animated.View entering={FadeIn.delay(900).duration(500)} style={styles.confettiContainer}>
-            <Text style={styles.confetti}>{'\uD83C\uDF89 \uD83C\uDF8A \u2B50 \uD83C\uDF1F \uD83C\uDF89'}</Text>
+            <View style={styles.confettiRow}>
+              <EmojiImage emoji={'\uD83C\uDF89'} size={32} />
+              <EmojiImage emoji={'\uD83C\uDF8A'} size={32} />
+              <EmojiImage emoji={'\u2B50'} size={32} />
+              <EmojiImage emoji={'\uD83C\uDF1F'} size={32} />
+              <EmojiImage emoji={'\uD83C\uDF89'} size={32} />
+            </View>
           </Animated.View>
 
           <View style={styles.actions}>
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing.xl,
   },
-  emoji: { fontSize: 100, marginBottom: spacing.md },
+  answerEmoji: { marginBottom: spacing.md },
   answer: {
     fontSize: fonts.sizes.xxl,
     fontWeight: fonts.weights.extraBold,
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   confettiContainer: { marginTop: spacing.md },
-  confetti: { fontSize: 32, textAlign: 'center' },
+  confettiRow: { flexDirection: 'row' as const, gap: 8, justifyContent: 'center' as const },
   actions: {
     marginTop: spacing.xl,
     gap: spacing.md,
