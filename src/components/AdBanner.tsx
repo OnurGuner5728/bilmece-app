@@ -1,45 +1,50 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../theme/colors';
-import { fonts } from '../theme/fonts';
-import { borderRadius, spacing } from '../theme/spacing';
+import { View, StyleSheet, Platform } from 'react-native';
+import { spacing } from '../theme/spacing';
 
-// TODO: AdMob entegrasyonu için aşağıdaki adımları uygula:
-// 1. react-native-google-mobile-ads paketi New Arch + Android SDK 36 ile
-//    uyumlu bir versiyona ulaştığında package.json'a ekle
-// 2. Bu dosyayı gerçek BannerAd implementasyonuyla güncelle
-// 3. app.json plugins'e react-native-google-mobile-ads config'ini geri ekle
-// 4. metro.config.js'deki empty shim resolver'ını kaldır
+// Bilmecelerce AdMob Banner
+// DEV: Google resmi test banner ID kullanılır
+// PROD: ca-app-pub-9813586099759759/3942483813
+const BANNER_AD_UNIT_ID = __DEV__
+  ? 'ca-app-pub-3940256099942544/6300978111'        // Google resmi test banner ID
+  : 'ca-app-pub-9813586099759759/3942483813';        // Bilmecelerce banner reklamı
+
+let BannerAd: any = null;
+let BannerAdSize: any = null;
+
+try {
+  const ads = require('react-native-google-mobile-ads');
+  BannerAd = ads.BannerAd;
+  BannerAdSize = ads.BannerAdSize;
+} catch {
+  // Native modül mevcut değil (Expo Go / web), banner gösterilmez
+}
 
 interface AdBannerProps {
   size?: 'banner' | 'interstitial';
 }
 
 export function AdBanner({ size = 'banner' }: AdBannerProps) {
-  if (size === 'interstitial') {
+  if (size === 'interstitial' || Platform.OS === 'web' || !BannerAd) {
     return null;
   }
 
-  // Reklam şu an devre dışı — AdMob entegrasyonu için TODO'ya bak
   return (
-    <View style={styles.placeholder}>
-      <Text style={styles.placeholderText}>Reklam Alanı</Text>
+    <View style={styles.container}>
+      <BannerAd
+        unitId={BANNER_AD_UNIT_ID}
+        size={BannerAdSize?.ANCHORED_ADAPTIVE_BANNER ?? 'ANCHORED_ADAPTIVE_BANNER'}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  placeholder: {
-    height: 60,
-    backgroundColor: colors.pastel.purple,
-    borderRadius: borderRadius.sm,
+  container: {
     alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: spacing.md,
     marginVertical: spacing.sm,
-  },
-  placeholderText: {
-    fontSize: fonts.sizes.sm,
-    color: colors.textSecondary,
   },
 });

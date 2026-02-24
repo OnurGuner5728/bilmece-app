@@ -23,8 +23,8 @@ import { shouldShowAd } from '../src/utils/helpers';
 // gercek Interstitial Ad Unit ID ile degistirin.
 // Su anki deger Google'in resmi test ID'sidir.
 const INTERSTITIAL_AD_ID = __DEV__
-  ? 'ca-app-pub-3940256099942544/1033173712'  // Google test ID
-  : 'ca-app-pub-XXXXXXXXXXXXX/ZZZZZZZZZZ';    // TODO: Gercek Interstitial ID yazin
+  ? 'ca-app-pub-3940256099942544/1033173712'       // Google resmi test ID
+  : 'ca-app-pub-9813586099759759/3222776000';       // Bilmecelerce gecis reklamı
 
 let InterstitialAd: any = null;
 let AdEventType: any = null;
