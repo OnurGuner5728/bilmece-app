@@ -17,11 +17,9 @@ import { AnswerOption } from '../src/types';
 import { colors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing } from '../src/theme/spacing';
+import { EmojiImage } from '../src/components/EmojiImage';
 import { shouldShowAd } from '../src/utils/helpers';
 
-// TODO: Production icin asagidaki test ID'yi AdMob konsolundan aldiginiz
-// gercek Interstitial Ad Unit ID ile degistirin.
-// Su anki deger Google'in resmi test ID'sidir.
 const INTERSTITIAL_AD_ID = __DEV__
   ? 'ca-app-pub-3940256099942544/1033173712'       // Google resmi test ID
   : 'ca-app-pub-9813586099759759/3222776000';       // Bilmecelerce gecis reklamı
@@ -132,7 +130,7 @@ export default function CategoryScreen() {
     return (
       <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.gradient}>
         <SafeAreaView style={styles.centered}>
-          <Text style={styles.emptyEmoji}>{'\uD83C\uDF89'}</Text>
+          <EmojiImage emoji={'\uD83C\uDF89'} size={64} style={{ marginBottom: spacing.md }} />
           <Text style={styles.emptyText}>Bu kategorideki tüm bilmeceleri tamamladın!</Text>
           <Button title="Ana Sayfaya Dön" onPress={() => router.replace('/')} variant="secondary" size="large" />
         </SafeAreaView>
@@ -191,9 +189,10 @@ export default function CategoryScreen() {
     <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.gradient}>
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.categoryHeader}>
-          <Text style={styles.categoryTitle}>
-            {meta?.emoji} {meta?.label}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            {meta?.emoji ? <EmojiImage emoji={meta.emoji} size={22} /> : null}
+            <Text style={styles.categoryTitle}>{meta?.label}</Text>
+          </View>
         </View>
 
         <ProgressBar
@@ -277,7 +276,7 @@ export default function CategoryScreen() {
           {state.isAnswered && state.isCorrect && (
             <Animated.View entering={FadeIn.duration(300)} style={styles.celebration}>
               <Text style={styles.celebrationText}>
-                {'\uD83C\uDF89'} Tebrikler! +{ScoreService.calculateScore(currentRiddle.difficulty, state.showHint, progress.currentStreak)} puan
+                Tebrikler! +{ScoreService.calculateScore(currentRiddle.difficulty, state.showHint, progress.currentStreak)} puan
               </Text>
             </Animated.View>
           )}
@@ -298,7 +297,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
   },
-  emptyEmoji: { fontSize: 64, marginBottom: spacing.md },
   emptyText: {
     fontSize: fonts.sizes.xl,
     fontWeight: fonts.weights.bold,

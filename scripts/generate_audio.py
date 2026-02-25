@@ -70,6 +70,13 @@ async def main():
         out_path = os.path.join(OUTPUT_DIR, f"{rid}.mp3")
         tasks.append((rid, question, out_path))
 
+    # Bilmece cevapları
+    for riddle in riddles:
+        rid = riddle["id"]
+        answer = riddle["answer"]
+        out_path = os.path.join(OUTPUT_DIR, f"{rid}_cevap.mp3")
+        tasks.append((f"{rid}_cevap", answer, out_path))
+
     # Standart cümleler
     for phrase_id, text in STANDARD_PHRASES.items():
         out_path = os.path.join(OUTPUT_DIR, f"{phrase_id}.mp3")

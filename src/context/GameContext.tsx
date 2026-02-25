@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { GameState, AgeGroup, Difficulty, UserProgress, AnswerOption } from '../types';
+import { GameState, AgeGroup, Difficulty, UserProgress, AnswerOption, Badge } from '../types';
 import { StorageService } from '../services/StorageService';
 
 type GameAction =
@@ -20,7 +20,8 @@ type GameAction =
   | { type: 'RESET_STREAK' }
   | { type: 'SELECT_ANSWER'; payload: AnswerOption }
   | { type: 'CLEAR_ANSWER' }
-  | { type: 'SAVE_POSITION' };
+  | { type: 'SAVE_POSITION' }
+  | { type: 'AWARD_BADGES'; payload: Badge[] };
 
 interface GameContextValue {
   state: GameState;
@@ -200,6 +201,15 @@ function gameReducer(
         },
       };
     }
+    case 'AWARD_BADGES':
+      if (action.payload.length === 0) return state;
+      return {
+        ...state,
+        progress: {
+          ...state.progress,
+          badges: [...state.progress.badges, ...action.payload],
+        },
+      };
     default:
       return state;
   }

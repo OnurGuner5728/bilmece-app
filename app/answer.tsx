@@ -31,14 +31,23 @@ export default function AnswerScreen() {
     ? ageGroupColors[state.selectedAgeGroup]?.gradient ?? [colors.gradientStart, colors.gradientEnd]
     : [colors.gradientStart, colors.gradientEnd];
 
+  // Ses: cevabı EmelNeural sesiyle oku
   useEffect(() => {
     if (currentRiddle && settings.soundEnabled && state.selectedAgeGroup) {
-      SpeechService.speak(currentRiddle.answer, state.selectedAgeGroup!);
+      SpeechService.speak(currentRiddle.answer, state.selectedAgeGroup!, `${currentRiddle.id}_cevap`);
     }
     return () => {
       SpeechService.stop();
     };
   }, [currentRiddle, settings.soundEnabled, state.selectedAgeGroup]);
+
+  // Rozet kontrolü: yeni kazanılan rozetleri kaydet
+  useEffect(() => {
+    const newBadges = ScoreService.checkBadges(progress);
+    if (newBadges.length > 0) {
+      dispatch({ type: 'AWARD_BADGES', payload: newBadges });
+    }
+  }, []);
 
   if (!currentRiddle || !state.selectedAgeGroup || !state.selectedDifficulty) {
     router.replace('/');

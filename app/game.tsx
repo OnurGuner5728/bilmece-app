@@ -18,11 +18,9 @@ import { AnswerOption } from '../src/types';
 import { colors, ageGroupColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing } from '../src/theme/spacing';
+import { EmojiImage } from '../src/components/EmojiImage';
 import { shouldShowAd } from '../src/utils/helpers';
 
-// TODO: Production icin asagidaki test ID'yi AdMob konsolundan aldiginiz
-// gercek Interstitial Ad Unit ID ile degistirin.
-// Su anki deger Google'in resmi test ID'sidir.
 const INTERSTITIAL_AD_ID = __DEV__
   ? 'ca-app-pub-3940256099942544/1033173712'       // Google resmi test ID
   : 'ca-app-pub-9813586099759759/3222776000';       // Bilmecelerce gecis reklamı
@@ -124,13 +122,12 @@ export default function GameScreen() {
 
   const currentRiddle = filteredRiddles[state.currentRiddleIndex];
   const gradientColors = ageGroupColors[state.selectedAgeGroup]?.gradient ?? [colors.gradientStart, colors.gradientEnd];
-  const isLast = state.currentRiddleIndex >= filteredRiddles.length - 1;
 
   if (!currentRiddle) {
     return (
       <LinearGradient colors={gradientColors} style={styles.gradient}>
         <SafeAreaView style={styles.centered}>
-          <Text style={styles.emptyEmoji}>{'\uD83C\uDF89'}</Text>
+          <EmojiImage emoji={'\uD83C\uDF89'} size={64} style={{ marginBottom: spacing.md }} />
           <Text style={styles.emptyText}>Tüm bilmeceleri tamamladın!</Text>
           <Button title="Ana Sayfaya Dön" onPress={() => router.replace('/')} variant="secondary" size="large" />
         </SafeAreaView>
@@ -159,15 +156,12 @@ export default function GameScreen() {
         SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, state.selectedAgeGroup!, 'tebrikler');
       }
 
-      // Auto advance after 2 seconds
-      if (!isLast) {
-        autoAdvanceTimer.current = setTimeout(() => {
-          if (shouldShowAd(state.riddlesSinceLastAd)) {
-            showInterstitialAd();
-          }
-          dispatch({ type: 'NEXT_RIDDLE' });
-        }, 2500);
-      }
+      autoAdvanceTimer.current = setTimeout(() => {
+        if (shouldShowAd(state.riddlesSinceLastAd)) {
+          showInterstitialAd();
+        }
+        router.push('/answer');
+      }, 800);
     } else {
       // Wrong answer
       dispatch({ type: 'RESET_STREAK' });
@@ -277,14 +271,6 @@ export default function GameScreen() {
             </View>
           </Animated.View>
 
-          {/* Correct answer celebration */}
-          {state.isAnswered && state.isCorrect && (
-            <Animated.View entering={FadeIn.duration(300)} style={styles.celebration}>
-              <Text style={styles.celebrationText}>
-                {'\uD83C\uDF89'} Tebrikler! +{ScoreService.calculateScore(state.selectedDifficulty!, state.showHint, progress.currentStreak)} puan
-              </Text>
-            </Animated.View>
-          )}
         </View>
 
         <AdBanner />
@@ -302,7 +288,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
   },
-  emptyEmoji: { fontSize: 64, marginBottom: spacing.md },
   emptyText: {
     fontSize: fonts.sizes.xl,
     fontWeight: fonts.weights.bold,
@@ -411,17 +396,5 @@ const styles = StyleSheet.create({
   optionRow: {
     flexDirection: 'row',
     marginBottom: spacing.xs,
-  },
-  celebration: {
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  celebrationText: {
-    fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.extraBold,
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0,0,0,0.3)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 4,
   },
 });

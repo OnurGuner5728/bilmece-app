@@ -150,12 +150,16 @@ export default function SettingsScreen() {
               />
             </View>
             <View style={styles.row}>
-              <Text style={styles.label}>Arka Plan M\u00fczi\u011fi</Text>
+              <View>
+                <Text style={styles.label}>Arka Plan M\u00fczi\u011fi</Text>
+                <Text style={styles.comingSoon}>Yak\u0131nda</Text>
+              </View>
               <Switch
-                value={settings.musicEnabled}
-                onValueChange={() => settingsDispatch({ type: 'TOGGLE_MUSIC' })}
+                value={false}
+                onValueChange={() => {}}
+                disabled
                 trackColor={{ false: colors.textLight, true: colors.primaryLight }}
-                thumbColor={settings.musicEnabled ? colors.primary : '#f4f3f4'}
+                thumbColor={'#f4f3f4'}
               />
             </View>
           </View>
@@ -194,7 +198,7 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.version}>Bilmecelerce v1.0.0</Text>
+            <Text style={styles.version}>Bilmecelerce v1.2.0</Text>
             <Text style={styles.copyright}>\u00c7ocuklar i\u00e7in e\u011fitici bilmece oyunu</Text>
           </View>
         </ScrollView>
@@ -281,6 +285,11 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.md,
     color: colors.text,
     fontWeight: fonts.weights.medium,
+  },
+  comingSoon: {
+    fontSize: fonts.sizes.xs,
+    color: colors.textLight,
+    marginTop: 2,
   },
   changePinButton: {
     marginTop: spacing.sm,

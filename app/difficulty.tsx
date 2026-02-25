@@ -37,6 +37,9 @@ export default function DifficultyScreen() {
     <LinearGradient colors={gradientColors} style={styles.gradient}>
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Text style={styles.backText}>{'\u2190'}</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>Zorluk Seç</Text>
           <Text style={styles.subtitle}>{ageGroup} yaş grubu</Text>
         </View>
@@ -95,6 +98,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: spacing.xl,
     paddingBottom: spacing.lg,
+  },
+  backButton: {
+    position: 'absolute',
+    left: spacing.md,
+    top: spacing.xl,
+    padding: spacing.sm,
+  },
+  backText: {
+    fontSize: fonts.sizes.xl,
+    color: '#FFFFFF',
+    fontWeight: fonts.weights.bold,
   },
   title: {
     fontSize: fonts.sizes.xxl,

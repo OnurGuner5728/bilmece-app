@@ -85,7 +85,7 @@ export default function HomeScreen() {
                 <Text style={styles.dailyQuestion} numberOfLines={2}>
                   {dailyRiddle.question}
                 </Text>
-                <Text style={styles.dailyTap}>Cevaplamak için dokun &rarr;</Text>
+                <Text style={styles.dailyTap}>{'Cevaplamak için dokun \u2192'}</Text>
               </LinearGradient>
             </TouchableOpacity>
           </Animated.View>
