@@ -158,7 +158,7 @@ export default function SettingsScreen() {
         <ScrollView contentContainerStyle={styles.scroll}>
           {/* Sound & Music */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\uD83D\uDD0A'} Ses ve M\u00FCzik</Text>
+            <Text style={styles.sectionTitle}>{'\uD83D\uDD0A'} Ses ve Müzik</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Ses Efektleri</Text>
               <Switch
@@ -169,7 +169,7 @@ export default function SettingsScreen() {
               />
             </View>
             <View style={[styles.row, styles.rowLast]}>
-              <Text style={styles.label}>Arka Plan M\u00FCzi\u011Fi</Text>
+              <Text style={styles.label}>Arka Plan Müziği</Text>
               <Switch
                 value={settings.musicEnabled}
                 onValueChange={() => settingsDispatch({ type: 'TOGGLE_MUSIC' })}
@@ -181,9 +181,9 @@ export default function SettingsScreen() {
 
           {/* Parental Control */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\uD83D\uDD12'} Ebeveyn Kontrol\u00FC</Text>
+            <Text style={styles.sectionTitle}>{'\uD83D\uDD12'} Ebeveyn Kontrolü</Text>
             <View style={[styles.row, !settings.parentalControlEnabled && styles.rowLast]}>
-              <Text style={styles.label}>Ebeveyn Kontrol\u00FC</Text>
+              <Text style={styles.label}>Ebeveyn Kontrolü</Text>
               <Switch
                 value={settings.parentalControlEnabled}
                 onValueChange={handleParentalToggle}
@@ -196,21 +196,21 @@ export default function SettingsScreen() {
                 style={styles.changePinButton}
                 onPress={() => openPinModal('change')}
               >
-                <Text style={styles.changePinText}>PIN De\u011Fi\u015Ftir</Text>
+                <Text style={styles.changePinText}>PIN Değiştir</Text>
               </TouchableOpacity>
             )}
           </View>
 
           {/* About & Links */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\u2139\uFE0F'} Hakk\u0131nda</Text>
+            <Text style={styles.sectionTitle}>{'\u2139\uFE0F'} Hakkında</Text>
             <TouchableOpacity style={styles.linkRow} onPress={handleRateApp}>
               <Text style={styles.linkIcon}>{'\u2B50'}</Text>
-              <Text style={styles.linkText}>Uygulamay\u0131 De\u011Ferlendir</Text>
+              <Text style={styles.linkText}>Uygulamayı Değerlendir</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.linkRow} onPress={handlePrivacyPolicy}>
               <Text style={styles.linkIcon}>{'\uD83D\uDD12'}</Text>
-              <Text style={styles.linkText}>Gizlilik Politikas\u0131</Text>
+              <Text style={styles.linkText}>Gizlilik Politikası</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.linkRow, styles.rowLast]} onPress={handleSupport}>
               <Text style={styles.linkIcon}>{'\u2709\uFE0F'}</Text>
@@ -221,7 +221,7 @@ export default function SettingsScreen() {
           {/* Danger Zone */}
           <View style={styles.dangerSection}>
             <Button
-              title={resetting ? 'S\u0131f\u0131rlan\u0131yor...' : 'T\u00FCm Verileri S\u0131f\u0131rla'}
+              title={resetting ? 'Sıfırlanıyor...' : 'Tüm Verileri Sıfırla'}
               onPress={handleClearData}
               variant="outline"
               size="large"

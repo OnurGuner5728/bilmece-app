@@ -140,6 +140,7 @@ export default function CategoryScreen() {
       }
 
       autoAdvanceTimer.current = setTimeout(() => {
+        SpeechService.stop();
         if (shouldShowAd(state.riddlesSinceLastAd)) {
           showInterstitialAd();
         }

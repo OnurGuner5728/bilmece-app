@@ -64,7 +64,7 @@ const CURATED: Record<string, string> = {
   yunus: UNSPLASH_PHOTO('1570481662006-a3a1374699e8'),
   flamingo: UNSPLASH_PHOTO('1497206365907-f5e630693df0'),
   timsah: UNSPLASH_PHOTO('1585095595205-e68f1b5a7b69'),
-  sinek: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // sinek: removed — photo ID '1558618666-fcd25c85f82e' shared by 13 unrelated keys → emoji fallback
   geyik: UNSPLASH_PHOTO('1484406743662-d58c3e913a1c'),
   devekuşu: UNSPLASH_PHOTO('1559253259-c39a0bea7be8'),
   antilop: UNSPLASH_PHOTO('1516426122078-c23e76319801'),
@@ -346,22 +346,22 @@ const CURATED: Record<string, string> = {
   baş: UNSPLASH_PHOTO('1531746790731-6c087fecd65a'),
 
   // --- Household Items (Ev Eşyaları) ---
-  kilit: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  süpürge: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // kilit: removed — same wrong photo ID → emoji fallback
+  // süpürge: removed — same wrong photo ID → emoji fallback
   beşik: UNSPLASH_PHOTO('1505693416388-ac5ce068fe85'),
   musluk: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   soba: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
   kova: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   kapı: UNSPLASH_PHOTO('1517991104123-1d56a6e81ed9'),
-  radyo: UNSPLASH_PHOTO('1568901346375-23c9450c58cd'),
+  // radyo: removed — photo shows hamburger instead of radio → emoji fallback
   televizyon: UNSPLASH_PHOTO('1593359677879-a4bb92f4e3b'),
   dolap: UNSPLASH_PHOTO('1555041469-a586c28b2a8b'),
   tabak: UNSPLASH_PHOTO('1567620832903-9fc6debc209f'),
   bardak: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   bıçak: UNSPLASH_PHOTO('1567620832903-9fc6debc209f'),
-  'çamaşır_makinesi': UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  çamaşır: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  'dikiş_makinesi': UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // 'çamaşır_makinesi': removed — wrong photo ID → emoji fallback
+  // çamaşır: removed — wrong photo ID → emoji fallback
+  // 'dikiş_makinesi': removed — wrong photo ID → emoji fallback
   fırın: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
   tavan: UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
   pencere: UNSPLASH_PHOTO('1517991104123-1d56a6e81ed9'),
@@ -369,8 +369,8 @@ const CURATED: Record<string, string> = {
   sehpa: UNSPLASH_PHOTO('1555041469-a586c28b2a8b'),
   mikrodalga: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
   buzdolabı: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
-  çöp_kamyonu: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  vantilatör: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // çöp_kamyonu: removed — wrong photo ID → emoji fallback
+  // vantilatör: removed — wrong photo ID → emoji fallback
   sünger: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   çömlek: UNSPLASH_PHOTO('1567620832903-9fc6debc209f'),
   seramik: UNSPLASH_PHOTO('1567620832903-9fc6debc209f'),
@@ -381,7 +381,7 @@ const CURATED: Record<string, string> = {
   'sokak_lambası': UNSPLASH_PHOTO('1550985543-49bee3167284'),
 
   // --- Vehicles & Transport (Araçlar) ---
-  kamyon: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // kamyon: removed — wrong photo ID → emoji fallback
   motosiklet: UNSPLASH_PHOTO('1558618047-3c8c76ca4d19'),
   otobüs: UNSPLASH_PHOTO('1544620347-c4fd4a3d5957'),
   helikopter: UNSPLASH_PHOTO('1557800636-882a8057e49a'),
@@ -447,9 +447,9 @@ const CURATED: Record<string, string> = {
   asansör: UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
   'i̇nsan': UNSPLASH_PHOTO('1476703925-39c2438f2bce'),
   insan: UNSPLASH_PHOTO('1476703925-39c2438f2bce'),
-  'i̇ğne': UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  iğne: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
-  anahtar: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // 'i̇ğne': removed — wrong photo ID → emoji fallback
+  // iğne: removed — wrong photo ID → emoji fallback
+  // anahtar: removed — wrong photo ID → emoji fallback
   sıcaklık: UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
   saat_ibresi: UNSPLASH_PHOTO('1495364141860-b0d03eccd065'),
   'saat ibresi': UNSPLASH_PHOTO('1495364141860-b0d03eccd065'),
@@ -472,7 +472,7 @@ const CURATED: Record<string, string> = {
   'anne-baba': UNSPLASH_PHOTO('1476703925-39c2438f2bce'),
   postacı: UNSPLASH_PHOTO('1579187707643-35646d22b596'),
   'i̇sim': UNSPLASH_PHOTO('1513542789411-b6a5d4f31634'),
-  sır: UNSPLASH_PHOTO('1558618666-fcd25c85f82e'),
+  // sır: removed — wrong photo ID → emoji fallback
   'gökdelen': UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
   tura: UNSPLASH_PHOTO('1446776811953-b23d57bd21aa'),
   nara: UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
