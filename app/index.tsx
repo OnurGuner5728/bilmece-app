@@ -11,7 +11,8 @@ import { useGame } from '../src/context/GameContext';
 import { RiddleService, CATEGORY_META } from '../src/services/RiddleService';
 import { AgeGroup } from '../src/types';
 import { EmojiImage } from '../src/components/EmojiImage';
-import { colors } from '../src/theme/colors';
+import { RealImage } from '../src/components/RealImage';
+import { colors, categoryColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing, borderRadius } from '../src/theme/spacing';
 
@@ -50,9 +51,13 @@ export default function HomeScreen() {
     >
       <SafeAreaView style={styles.safe}>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          {/* Header with mascot */}
           <View style={styles.header}>
+            <Animated.View entering={BounceIn.duration(600)} style={styles.mascotRow}>
+              <EmojiImage emoji={'\uD83E\uDD89'} size={44} />
+            </Animated.View>
             <Text style={styles.title}>Bilmecelerce</Text>
-            <Text style={styles.subtitle}>Yaş grubunu seç ve oynamaya başla!</Text>
+            <Text style={styles.subtitle}>Ya\u015F grubunu se\u00E7 ve oynamaya ba\u015Fla!</Text>
           </View>
 
           <ScoreDisplay
@@ -69,23 +74,26 @@ export default function HomeScreen() {
               activeOpacity={0.85}
             >
               <LinearGradient
-                colors={['#FF6B9D', '#FF8E72']}
+                colors={['#F472B6', '#FB923C']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.dailyGradient}
               >
                 <View style={styles.dailyHeader}>
                   <Animated.View entering={BounceIn.delay(300).duration(600)}>
-                    <EmojiImage emoji={dailyRiddle.answerEmoji} size={48} />
+                    <View style={styles.dailyEmojiCircle}>
+                      <RealImage imageKey={dailyRiddle.answerImage} emoji={dailyRiddle.answerEmoji} size={40} style={{ borderRadius: 20 }} />
+                    </View>
                   </Animated.View>
                   <View style={styles.dailyBadge}>
-                    <Text style={styles.dailyBadgeText}>Günün Bilmecesi</Text>
+                    <EmojiImage emoji={'\u2728'} size={14} />
+                    <Text style={styles.dailyBadgeText}> G\u00FCn\u00FCn Bilmecesi</Text>
                   </View>
                 </View>
                 <Text style={styles.dailyQuestion} numberOfLines={2}>
                   {dailyRiddle.question}
                 </Text>
-                <Text style={styles.dailyTap}>{'Cevaplamak için dokun \u2192'}</Text>
+                <Text style={styles.dailyTap}>{'Cevaplamak i\u00E7in dokun \u2192'}</Text>
               </LinearGradient>
             </TouchableOpacity>
           </Animated.View>
@@ -101,16 +109,24 @@ export default function HomeScreen() {
               {CATEGORIES.map((cat, idx) => {
                 const meta = CATEGORY_META[cat];
                 const count = RiddleService.getCategoryCount(cat);
+                const accentColor = categoryColors[cat] || colors.primary;
                 return (
                   <Animated.View key={cat} entering={FadeInDown.delay(idx * 80).duration(300)}>
                     <TouchableOpacity
-                      style={styles.categoryChip}
+                      style={[styles.categoryChip, { borderBottomColor: accentColor }]}
                       onPress={() => handleCategorySelect(cat)}
                       activeOpacity={0.8}
                     >
-                      {meta?.emoji ? <EmojiImage emoji={meta.emoji} size={28} style={styles.categoryEmojiImage} /> : null}
+                      <View style={[styles.categoryEmojiCircle, { backgroundColor: accentColor + '18' }]}>
+                        <RealImage
+                          imageKey={`${cat}_icon`}
+                          emoji={meta?.emoji ?? '\uD83D\uDCE6'}
+                          size={26}
+                          style={{ borderRadius: 13 }}
+                        />
+                      </View>
                       <Text style={styles.categoryLabel}>{meta?.label}</Text>
-                      <Text style={styles.categoryCount}>{count}</Text>
+                      <Text style={[styles.categoryCount, { color: accentColor }]}>{count}</Text>
                     </TouchableOpacity>
                   </Animated.View>
                 );
@@ -119,7 +135,7 @@ export default function HomeScreen() {
           </Animated.View>
 
           {/* Age Group Cards */}
-          <Text style={styles.sectionTitle}>Yaş Grupları</Text>
+          <Text style={styles.sectionTitle}>Ya\u015F Gruplar\u0131</Text>
           <View style={styles.cards}>
             {AGE_GROUPS.map((ag) => {
               const total = RiddleService.getRiddlesByAgeGroup(ag).length;
@@ -182,10 +198,14 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xl,
     paddingBottom: spacing.lg,
   },
+  mascotRow: {
+    marginBottom: spacing.sm,
+  },
   title: {
     fontSize: fonts.sizes.title,
     fontWeight: fonts.weights.extraBold,
     color: colors.primaryDark,
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: fonts.sizes.md,
@@ -196,13 +216,13 @@ const styles = StyleSheet.create({
   dailyCard: {
     marginHorizontal: spacing.md,
     marginTop: spacing.md,
-    borderRadius: borderRadius.lg,
+    borderRadius: borderRadius.xl,
     overflow: 'hidden',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    elevation: 6,
+    shadowColor: '#F472B6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
   },
   dailyGradient: {
     padding: spacing.lg,
@@ -213,11 +233,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.sm,
   },
-  dailyEmojiWrap: {},
+  dailyEmojiCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   dailyBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.3)',
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.xs + 2,
     borderRadius: borderRadius.round,
   },
   dailyBadgeText: {
@@ -229,17 +258,18 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.lg,
     fontWeight: fonts.weights.semiBold,
     color: '#FFFFFF',
-    lineHeight: 26,
+    lineHeight: 28,
   },
   dailyTap: {
     fontSize: fonts.sizes.sm,
-    color: 'rgba(255,255,255,0.8)',
+    color: 'rgba(255,255,255,0.85)',
     marginTop: spacing.sm,
+    fontWeight: fonts.weights.medium,
   },
   // Section Title
   sectionTitle: {
     fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.bold,
+    fontWeight: fonts.weights.extraBold,
     color: colors.primaryDark,
     marginTop: spacing.lg,
     marginBottom: spacing.sm,
@@ -251,29 +281,36 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   categoryChip: {
-    backgroundColor: 'rgba(255,255,255,0.85)',
+    backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.lg,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.md,
     alignItems: 'center',
-    minWidth: 80,
-    elevation: 2,
+    minWidth: 86,
+    elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.primary,
   },
-  categoryEmojiImage: {
+  categoryEmojiCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: spacing.xs,
   },
   categoryLabel: {
     fontSize: fonts.sizes.sm,
-    fontWeight: fonts.weights.semiBold,
+    fontWeight: fonts.weights.bold,
     color: colors.text,
   },
   categoryCount: {
     fontSize: fonts.sizes.xs,
-    color: colors.textSecondary,
+    fontWeight: fonts.weights.semiBold,
     marginTop: 2,
   },
   // Age group cards
@@ -290,10 +327,15 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.6)',
+    backgroundColor: 'rgba(255,255,255,0.75)',
     paddingVertical: spacing.md,
-    borderRadius: 12,
+    borderRadius: borderRadius.lg,
     alignItems: 'center',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
   },
   footerButtonContent: {
     flexDirection: 'row',
@@ -302,7 +344,7 @@ const styles = StyleSheet.create({
   },
   footerButtonText: {
     fontSize: fonts.sizes.md,
-    fontWeight: fonts.weights.semiBold,
+    fontWeight: fonts.weights.bold,
     color: colors.primaryDark,
   },
 });

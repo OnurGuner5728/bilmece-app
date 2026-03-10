@@ -1,59 +1,68 @@
 export const colors = {
-  primary: '#4A90D9',
-  primaryLight: '#7BB3E8',
-  primaryDark: '#2E6CB5',
+  primary: '#2563EB',
+  primaryLight: '#60A5FA',
+  primaryDark: '#1D4ED8',
 
-  secondary: '#FF8C42',
-  secondaryLight: '#FFB07A',
-  secondaryDark: '#E06E1F',
+  secondary: '#F59E0B',
+  secondaryLight: '#FCD34D',
+  secondaryDark: '#D97706',
 
-  success: '#4CAF50',
-  successLight: '#81C784',
-  error: '#EF5350',
-  warning: '#FFC107',
+  success: '#10B981',
+  successLight: '#6EE7B7',
+  error: '#EF4444',
+  warning: '#F59E0B',
 
-  background: '#F0F4FF',
+  background: '#F8FAFF',
   surface: '#FFFFFF',
   card: '#FFFFFF',
 
-  text: '#2D3436',
-  textSecondary: '#636E72',
-  textLight: '#B2BEC3',
+  text: '#1E293B',
+  textSecondary: '#64748B',
+  textLight: '#CBD5E1',
   textOnPrimary: '#FFFFFF',
 
-  gradientStart: '#A8D8EA',
-  gradientEnd: '#D4B5E6',
+  gradientStart: '#93C5FD',
+  gradientEnd: '#C4B5FD',
 
   pastel: {
-    pink: '#FFD1DC',
-    blue: '#B5E7F5',
-    green: '#C8F7C5',
-    yellow: '#FFF3B0',
-    purple: '#E8D5F5',
-    orange: '#FFE0C2',
+    pink: '#FECDD3',
+    blue: '#BFDBFE',
+    green: '#BBF7D0',
+    yellow: '#FEF08A',
+    purple: '#DDD6FE',
+    orange: '#FED7AA',
   },
 } as const;
 
 export const ageGroupColors: Record<string, { primary: string; background: string; gradient: [string, string] }> = {
   '4-6': {
-    primary: '#FF6B9D',
-    background: '#FFF0F5',
-    gradient: ['#FF6B9D', '#FF8E72'],
+    primary: '#F472B6',
+    background: '#FFF1F2',
+    gradient: ['#F472B6', '#FB923C'],
   },
   '7-9': {
-    primary: '#4A90D9',
-    background: '#F0F4FF',
-    gradient: ['#4A90D9', '#7C4DFF'],
+    primary: '#2563EB',
+    background: '#EFF6FF',
+    gradient: ['#3B82F6', '#8B5CF6'],
   },
   '10-12': {
-    primary: '#26A69A',
-    background: '#F0FFF4',
-    gradient: ['#26A69A', '#2196F3'],
+    primary: '#10B981',
+    background: '#ECFDF5',
+    gradient: ['#10B981', '#3B82F6'],
   },
 };
 
 export const difficultyColors: Record<string, string> = {
-  kolay: '#4CAF50',
-  orta: '#FF9800',
-  zor: '#F44336',
+  kolay: '#10B981',
+  orta: '#F59E0B',
+  zor: '#EF4444',
+};
+
+export const categoryColors: Record<string, string> = {
+  hayvanlar: '#F472B6',
+  yiyecek: '#FB923C',
+  'do\u011Fa': '#10B981',
+  'e\u015Fyalar': '#3B82F6',
+  'v\u00FCcut': '#8B5CF6',
+  'ara\u00E7lar': '#EF4444',
 };

@@ -9,18 +9,29 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  Linking,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Constants from 'expo-constants';
 import { useSettings } from '../src/context/SettingsContext';
 import { useGame } from '../src/context/GameContext';
 import { StorageService } from '../src/services/StorageService';
 import { Button } from '../src/components/Button';
+import { AdBanner } from '../src/components/AdBanner';
 import { colors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { borderRadius, spacing } from '../src/theme/spacing';
 
 type PinModalMode = 'setup' | 'verify' | 'change';
+
+const APP_VERSION = Constants.expoConfig?.version ?? '1.2.0';
+const PRIVACY_POLICY_URL = 'https://bilmecelerce.com/gizlilik';
+const SUPPORT_EMAIL = 'destek@bilmecelerce.com';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.bilmecelerce.app';
+// TODO: App Store'a yayınlandıktan sonra gerçek App ID ile güncelle
+const APP_STORE_URL = 'https://apps.apple.com/app/bilmecelerce/id0000000000';
 
 export default function SettingsScreen() {
   const { settings, dispatch: settingsDispatch } = useSettings();
@@ -53,27 +64,23 @@ export default function SettingsScreen() {
     }
 
     if (pinModalMode === 'setup') {
-      // Setting up a new PIN and enabling parental control
       settingsDispatch({ type: 'SET_PIN', payload: pinInput });
       settingsDispatch({ type: 'TOGGLE_PARENTAL_CONTROL' });
       closePinModal();
     } else if (pinModalMode === 'verify') {
-      // Verifying PIN to disable parental control
       if (pinInput === settings.parentalPin) {
         settingsDispatch({ type: 'TOGGLE_PARENTAL_CONTROL' });
         closePinModal();
       } else {
-        setPinError('Yanl\u0131\u015f PIN. Tekrar deneyin.');
+        setPinError('Yanl\u0131\u015F PIN. Tekrar deneyin.');
         setPinInput('');
       }
     } else if (pinModalMode === 'change') {
-      // Verifying current PIN before allowing change
       if (pinInput === settings.parentalPin) {
         closePinModal();
-        // After successful verification, open setup modal for new PIN
         setTimeout(() => openPinModal('setup'), 300);
       } else {
-        setPinError('Yanl\u0131\u015f PIN. Tekrar deneyin.');
+        setPinError('Yanl\u0131\u015F PIN. Tekrar deneyin.');
         setPinInput('');
       }
     }
@@ -81,10 +88,8 @@ export default function SettingsScreen() {
 
   const handleParentalToggle = () => {
     if (!settings.parentalControlEnabled) {
-      // Turning ON: show PIN setup modal
       openPinModal('setup');
     } else {
-      // Turning OFF: require PIN verification
       openPinModal('verify');
     }
   };
@@ -92,7 +97,7 @@ export default function SettingsScreen() {
   const handleClearData = () => {
     Alert.alert(
       'Verileri S\u0131f\u0131rla',
-      'T\u00fcm ilerleme ve puanlar silinecek. Emin misin?',
+      'T\u00FCm ilerleme ve puanlar silinecek. Emin misin?',
       [
         { text: '\u0130ptal', style: 'cancel' },
         {
@@ -113,11 +118,24 @@ export default function SettingsScreen() {
               },
             });
             setResetting(false);
-            Alert.alert('Ba\u015far\u0131l\u0131', 'T\u00fcm veriler s\u0131f\u0131rland\u0131.');
+            Alert.alert('Ba\u015Far\u0131l\u0131', 'T\u00FCm veriler s\u0131f\u0131rland\u0131.');
           },
         },
       ]
     );
+  };
+
+  const handleRateApp = () => {
+    const url = Platform.OS === 'ios' ? APP_STORE_URL : PLAY_STORE_URL;
+    Linking.openURL(url);
+  };
+
+  const handlePrivacyPolicy = () => {
+    Linking.openURL(PRIVACY_POLICY_URL);
+  };
+
+  const handleSupport = () => {
+    Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=Bilmecelerce%20Destek`);
   };
 
   const getPinModalTitle = () => {
@@ -138,8 +156,9 @@ export default function SettingsScreen() {
     >
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <ScrollView contentContainerStyle={styles.scroll}>
+          {/* Sound & Music */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\uD83D\uDD0A'} Ses ve M\u00fczik</Text>
+            <Text style={styles.sectionTitle}>{'\uD83D\uDD0A'} Ses ve M\u00FCzik</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Ses Efektleri</Text>
               <Switch
@@ -149,25 +168,22 @@ export default function SettingsScreen() {
                 thumbColor={settings.soundEnabled ? colors.primary : '#f4f3f4'}
               />
             </View>
-            <View style={styles.row}>
-              <View>
-                <Text style={styles.label}>Arka Plan M\u00fczi\u011fi</Text>
-                <Text style={styles.comingSoon}>Yak\u0131nda</Text>
-              </View>
+            <View style={[styles.row, styles.rowLast]}>
+              <Text style={styles.label}>Arka Plan M\u00FCzi\u011Fi</Text>
               <Switch
-                value={false}
-                onValueChange={() => {}}
-                disabled
+                value={settings.musicEnabled}
+                onValueChange={() => settingsDispatch({ type: 'TOGGLE_MUSIC' })}
                 trackColor={{ false: colors.textLight, true: colors.primaryLight }}
-                thumbColor={'#f4f3f4'}
+                thumbColor={settings.musicEnabled ? colors.primary : '#f4f3f4'}
               />
             </View>
           </View>
 
+          {/* Parental Control */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>{'\uD83D\uDD12'} Ebeveyn Kontrol\u00fc</Text>
-            <View style={styles.row}>
-              <Text style={styles.label}>Ebeveyn Kontrol\u00fc</Text>
+            <Text style={styles.sectionTitle}>{'\uD83D\uDD12'} Ebeveyn Kontrol\u00FC</Text>
+            <View style={[styles.row, !settings.parentalControlEnabled && styles.rowLast]}>
+              <Text style={styles.label}>Ebeveyn Kontrol\u00FC</Text>
               <Switch
                 value={settings.parentalControlEnabled}
                 onValueChange={handleParentalToggle}
@@ -180,14 +196,32 @@ export default function SettingsScreen() {
                 style={styles.changePinButton}
                 onPress={() => openPinModal('change')}
               >
-                <Text style={styles.changePinText}>PIN De\u011fi\u015ftir</Text>
+                <Text style={styles.changePinText}>PIN De\u011Fi\u015Ftir</Text>
               </TouchableOpacity>
             )}
           </View>
 
+          {/* About & Links */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>{'\u2139\uFE0F'} Hakk\u0131nda</Text>
+            <TouchableOpacity style={styles.linkRow} onPress={handleRateApp}>
+              <Text style={styles.linkIcon}>{'\u2B50'}</Text>
+              <Text style={styles.linkText}>Uygulamay\u0131 De\u011Ferlendir</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.linkRow} onPress={handlePrivacyPolicy}>
+              <Text style={styles.linkIcon}>{'\uD83D\uDD12'}</Text>
+              <Text style={styles.linkText}>Gizlilik Politikas\u0131</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.linkRow, styles.rowLast]} onPress={handleSupport}>
+              <Text style={styles.linkIcon}>{'\u2709\uFE0F'}</Text>
+              <Text style={styles.linkText}>Destek</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Danger Zone */}
           <View style={styles.dangerSection}>
             <Button
-              title={resetting ? 'S\u0131f\u0131rlan\u0131yor...' : 'T\u00fcm Verileri S\u0131f\u0131rla'}
+              title={resetting ? 'S\u0131f\u0131rlan\u0131yor...' : 'T\u00FCm Verileri S\u0131f\u0131rla'}
               onPress={handleClearData}
               variant="outline"
               size="large"
@@ -197,11 +231,13 @@ export default function SettingsScreen() {
             />
           </View>
 
+          {/* Footer with version */}
           <View style={styles.footer}>
-            <Text style={styles.version}>Bilmecelerce v1.2.0</Text>
-            <Text style={styles.copyright}>\u00c7ocuklar i\u00e7in e\u011fitici bilmece oyunu</Text>
+            <Text style={styles.version}>Bilmecelerce v{APP_VERSION}</Text>
+            <Text style={styles.copyright}>{'\u00C7'}ocuklar i{'\u00E7'}in e{'\u011F'}itici bilmece oyunu</Text>
           </View>
         </ScrollView>
+        <AdBanner />
       </SafeAreaView>
 
       {/* PIN Modal */}
@@ -281,6 +317,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
   },
+  rowLast: {
+    borderBottomWidth: 0,
+  },
   label: {
     fontSize: fonts.sizes.md,
     color: colors.text,
@@ -300,6 +339,23 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.md,
     color: colors.primary,
     fontWeight: fonts.weights.semiBold,
+  },
+  // About links
+  linkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.sm + 2,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  linkIcon: {
+    fontSize: 18,
+    marginRight: spacing.sm + 4,
+  },
+  linkText: {
+    fontSize: fonts.sizes.md,
+    color: colors.primary,
+    fontWeight: fonts.weights.medium,
   },
   dangerSection: {
     marginTop: spacing.xl,

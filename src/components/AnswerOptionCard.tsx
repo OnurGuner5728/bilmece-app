@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
-import { EmojiImage } from './EmojiImage';
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, View } from 'react-native';
+import { RealImage } from './RealImage';
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -38,15 +38,15 @@ export function AnswerOptionCard({
 
         if (option.isCorrect) {
             scale.value = withSequence(
-                withSpring(1.1, { damping: 4 }),
+                withSpring(1.08, { damping: 4 }),
                 withSpring(1, { damping: 6 })
             );
         } else {
             shakeX.value = withSequence(
-                withTiming(-10, { duration: 50 }),
-                withTiming(10, { duration: 50 }),
-                withTiming(-10, { duration: 50 }),
-                withTiming(10, { duration: 50 }),
+                withTiming(-8, { duration: 50 }),
+                withTiming(8, { duration: 50 }),
+                withTiming(-8, { duration: 50 }),
+                withTiming(8, { duration: 50 }),
                 withTiming(0, { duration: 50 })
             );
         }
@@ -58,24 +58,33 @@ export function AnswerOptionCard({
         transform: [{ scale: scale.value }, { translateX: shakeX.value }],
     }));
 
-    let cardStyle: ViewStyle = styles.card;
+    let cardStyle: ViewStyle[] = [styles.card];
+    let borderAccentColor: string = colors.primaryLight;
+
     if (showResult && isSelected) {
-        cardStyle = option.isCorrect
-            ? { ...styles.card, ...styles.correct }
-            : { ...styles.card, ...styles.wrong };
+        if (option.isCorrect) {
+            cardStyle = [styles.card, styles.correct];
+            borderAccentColor = colors.success;
+        } else {
+            cardStyle = [styles.card, styles.wrong];
+            borderAccentColor = colors.error;
+        }
     } else if (showResult && option.isCorrect) {
-        cardStyle = { ...styles.card, ...styles.correctHint };
+        cardStyle = [styles.card, styles.correctHint];
+        borderAccentColor = colors.success;
     }
 
     return (
         <AnimatedTouchable
-            style={[cardStyle, animatedStyle]}
+            style={[...cardStyle, { borderLeftColor: borderAccentColor }, animatedStyle]}
             onPress={handlePress}
             disabled={disabled}
             activeOpacity={0.7}
         >
-            <EmojiImage emoji={option.emoji} size={48} style={styles.emojiImage} />
-            <Text style={styles.text} numberOfLines={1}>{option.text}</Text>
+            <View style={styles.emojiContainer}>
+                <RealImage imageKey={option.text.toLowerCase()} emoji={option.emoji} size={52} />
+            </View>
+            <Text style={styles.text} numberOfLines={2}>{option.text}</Text>
         </AnimatedTouchable>
     );
 }
@@ -83,36 +92,52 @@ export function AnswerOptionCard({
 const styles = StyleSheet.create({
     card: {
         flex: 1,
-        backgroundColor: 'rgba(255,255,255,0.95)',
+        backgroundColor: '#FFFFFF',
         borderRadius: borderRadius.xl,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: spacing.lg,
+        paddingVertical: spacing.md,
         paddingHorizontal: spacing.sm,
         margin: spacing.xs,
         elevation: 4,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.12,
-        shadowRadius: 6,
-        borderWidth: 3,
-        borderColor: 'transparent',
-        minHeight: 120,
+        shadowRadius: 8,
+        borderWidth: 2,
+        borderColor: 'rgba(0,0,0,0.04)',
+        borderLeftWidth: 5,
+        borderLeftColor: colors.primaryLight,
+        minHeight: 130,
     },
     correct: {
-        borderColor: '#4CAF50',
-        backgroundColor: '#E8F5E9',
+        borderColor: colors.success,
+        borderLeftColor: colors.success,
+        backgroundColor: '#ECFDF5',
+        shadowColor: colors.success,
+        shadowOpacity: 0.25,
+        elevation: 6,
     },
     wrong: {
-        borderColor: '#F44336',
-        backgroundColor: '#FFEBEE',
+        borderColor: colors.error,
+        borderLeftColor: colors.error,
+        backgroundColor: '#FEF2F2',
+        shadowColor: colors.error,
+        shadowOpacity: 0.2,
     },
     correctHint: {
-        borderColor: '#4CAF50',
-        backgroundColor: '#E8F5E9',
+        borderColor: colors.success,
+        borderLeftColor: colors.success,
+        backgroundColor: '#ECFDF5',
         opacity: 0.7,
     },
-    emojiImage: {
+    emojiContainer: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        backgroundColor: 'rgba(37, 99, 235, 0.06)',
+        alignItems: 'center',
+        justifyContent: 'center',
         marginBottom: spacing.xs,
     },
     text: {
@@ -120,5 +145,6 @@ const styles = StyleSheet.create({
         fontWeight: fonts.weights.bold,
         color: colors.text,
         textAlign: 'center',
+        lineHeight: 20,
     },
 });

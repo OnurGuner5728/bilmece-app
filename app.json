@@ -65,10 +65,10 @@
       ]
     ],
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "4c4cf7c8-11d0-41e5-91da-57070f2ecdc6"
-      },
-      "router": {}
+        "projectId": "017ea5e2-64a1-4c42-95d5-332cc5680a37"
+      }
     },
     "owner": "ogishere"
   }

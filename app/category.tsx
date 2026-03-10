@@ -1,10 +1,11 @@
-import React, { useMemo, useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
+import React, { useMemo, useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { AnswerOptionCard } from '../src/components/AnswerOptionCard';
+import { ScoreDisplay } from '../src/components/ScoreDisplay';
 import { ProgressBar } from '../src/components/ProgressBar';
 import { AdBanner } from '../src/components/AdBanner';
 import { Button } from '../src/components/Button';
@@ -14,34 +15,20 @@ import { RiddleService, CATEGORY_META } from '../src/services/RiddleService';
 import { ScoreService } from '../src/services/ScoreService';
 import { SpeechService } from '../src/services/SpeechService';
 import { AnswerOption } from '../src/types';
-import { colors } from '../src/theme/colors';
+import { colors, categoryColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing } from '../src/theme/spacing';
 import { EmojiImage } from '../src/components/EmojiImage';
 import { shouldShowAd } from '../src/utils/helpers';
-
-const INTERSTITIAL_AD_ID = __DEV__
-  ? 'ca-app-pub-3940256099942544/1033173712'       // Google resmi test ID
-  : 'ca-app-pub-9813586099759759/3222776000';       // Bilmecelerce gecis reklamı
-
-let InterstitialAd: any = null;
-let AdEventType: any = null;
-
-try {
-  const ads = require('react-native-google-mobile-ads');
-  InterstitialAd = ads.InterstitialAd;
-  AdEventType = ads.AdEventType;
-} catch {
-  // ads module not available
-}
+import { useInterstitialAd } from '../src/hooks/useInterstitialAd';
 
 export default function CategoryScreen() {
   const router = useRouter();
   const { state, progress, dispatch } = useGame();
   const { settings } = useSettings();
-  const interstitialRef = useRef<any>(null);
-  const interstitialLoadedRef = useRef(false);
+  const { showInterstitialAd } = useInterstitialAd();
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastAgeGroupRef = useRef<string>('7-9');
 
   const category = state.selectedCategory;
   const meta = category ? CATEGORY_META[category] : null;
@@ -66,6 +53,14 @@ export default function CategoryScreen() {
     }
   }, [state.currentRiddleIndex, filteredRiddles.length, settings.soundEnabled]);
 
+  // Track the last seen ageGroup so "bitti" sound uses the correct voice
+  useEffect(() => {
+    const currentRiddle = filteredRiddles[state.currentRiddleIndex];
+    if (currentRiddle) {
+      lastAgeGroupRef.current = currentRiddle.ageGroup;
+    }
+  }, [filteredRiddles, state.currentRiddleIndex]);
+
   // Cleanup auto-advance timer
   useEffect(() => {
     return () => {
@@ -80,58 +75,44 @@ export default function CategoryScreen() {
     };
   }, []);
 
-  // Interstitial ad setup (COPPA: requestNonPersonalizedAdsOnly)
-  useEffect(() => {
-    if (!InterstitialAd || Platform.OS === 'web') return;
-    try {
-      const interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_ID, {
-        requestNonPersonalizedAdsOnly: true,
-        tagForChildDirectedTreatment: true,
-        maxAdContentRating: 'G',
-      });
-      const loadedUnsub = interstitial.addAdEventListener(AdEventType.LOADED, () => {
-        interstitialLoadedRef.current = true;
-      });
-      const closedUnsub = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
-        interstitialLoadedRef.current = false;
-        interstitial.load();
-      });
-      const errorUnsub = interstitial.addAdEventListener(AdEventType.ERROR, () => {
-        interstitialLoadedRef.current = false;
-      });
-      interstitial.load();
-      interstitialRef.current = interstitial;
-      return () => {
-        loadedUnsub();
-        closedUnsub();
-        errorUnsub();
-      };
-    } catch {
-      // Ad SDK not available, skip gracefully
-    }
-  }, []);
-
-  const showInterstitialAd = useCallback(() => {
-    if (interstitialRef.current && interstitialLoadedRef.current) {
-      interstitialRef.current.show();
-      dispatch({ type: 'RESET_AD_COUNTER' });
-    }
-  }, [dispatch]);
-
   if (!category) {
     router.replace('/');
     return null;
   }
 
   const currentRiddle = filteredRiddles[state.currentRiddleIndex];
-  const isLast = state.currentRiddleIndex >= filteredRiddles.length - 1;
+  const accentColor = categoryColors[category ?? ''] ?? colors.primary;
+  const catGradient: [string, string] = [accentColor + 'CC', colors.gradientEnd];
+
+  // Play "bitti" sound when all riddles in category are completed (not when category is empty)
+  useEffect(() => {
+    if (!currentRiddle && filteredRiddles.length > 0 && settings.soundEnabled) {
+      SpeechService.speak(
+        'Bu kategorideki tüm bilmeceleri tamamladın!',
+        lastAgeGroupRef.current as any,
+        'bitti'
+      );
+    }
+  }, [currentRiddle?.id, filteredRiddles.length, settings.soundEnabled]);
 
   if (!currentRiddle) {
+    const isEmpty = filteredRiddles.length === 0;
     return (
-      <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.gradient}>
+      <LinearGradient colors={catGradient} style={styles.gradient}>
         <SafeAreaView style={styles.centered}>
-          <EmojiImage emoji={'\uD83C\uDF89'} size={64} style={{ marginBottom: spacing.md }} />
-          <Text style={styles.emptyText}>Bu kategorideki tüm bilmeceleri tamamladın!</Text>
+          <EmojiImage
+            emoji={isEmpty ? '\uD83D\uDD27' : '\uD83C\uDF89'}
+            size={64}
+            style={{ marginBottom: spacing.md }}
+          />
+          <Text style={styles.emptyText}>
+            {isEmpty
+              ? 'Bu kategoride henüz bilmece eklenmedi'
+              : 'Bu kategorideki tüm bilmeceleri tamamladın!'}
+          </Text>
+          {!isEmpty && (
+            <Text style={styles.emptySubText}>Harika iş çıkardın!</Text>
+          )}
           <Button title="Ana Sayfaya Dön" onPress={() => router.replace('/')} variant="secondary" size="large" />
         </SafeAreaView>
       </LinearGradient>
@@ -155,17 +136,15 @@ export default function CategoryScreen() {
       dispatch({ type: 'INCREMENT_STREAK' });
 
       if (settings.soundEnabled) {
-        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, currentRiddle.ageGroup, 'tebrikler');
+        SpeechService.speak('Harika! Doğru bildin!', currentRiddle.ageGroup, 'harika');
       }
 
-      if (!isLast) {
-        autoAdvanceTimer.current = setTimeout(() => {
-          if (shouldShowAd(state.riddlesSinceLastAd)) {
-            showInterstitialAd();
-          }
-          dispatch({ type: 'NEXT_RIDDLE' });
-        }, 2500);
-      }
+      autoAdvanceTimer.current = setTimeout(() => {
+        if (shouldShowAd(state.riddlesSinceLastAd)) {
+          showInterstitialAd();
+        }
+        router.push('/answer');
+      }, 800);
     } else {
       dispatch({ type: 'RESET_STREAK' });
       if (settings.soundEnabled) {
@@ -183,10 +162,13 @@ export default function CategoryScreen() {
 
   const handleToggleHint = () => {
     dispatch({ type: 'TOGGLE_HINT' });
+    if (!state.showHint && settings.soundEnabled) {
+      SpeechService.speak('İpucu!', currentRiddle.ageGroup, 'ipucu');
+    }
   };
 
   return (
-    <LinearGradient colors={[colors.gradientStart, colors.gradientEnd]} style={styles.gradient}>
+    <LinearGradient colors={catGradient} style={styles.gradient}>
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.categoryHeader}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -194,6 +176,12 @@ export default function CategoryScreen() {
             <Text style={styles.categoryTitle}>{meta?.label}</Text>
           </View>
         </View>
+
+        <ScoreDisplay
+          totalScore={progress.totalScore}
+          currentStreak={progress.currentStreak}
+          solvedCount={progress.solvedRiddles.length}
+        />
 
         <ProgressBar
           current={state.currentRiddleIndex + 1}
@@ -272,14 +260,6 @@ export default function CategoryScreen() {
             </View>
           </Animated.View>
 
-          {/* Correct answer celebration */}
-          {state.isAnswered && state.isCorrect && (
-            <Animated.View entering={FadeIn.duration(300)} style={styles.celebration}>
-              <Text style={styles.celebrationText}>
-                Tebrikler! +{ScoreService.calculateScore(currentRiddle.difficulty, state.showHint, progress.currentStreak)} puan
-              </Text>
-            </Animated.View>
-          )}
         </View>
 
         <AdBanner />
@@ -301,6 +281,12 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.xl,
     fontWeight: fonts.weights.bold,
     color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: spacing.xl,
+  },
+  emptySubText: {
+    fontSize: fonts.sizes.md,
+    color: 'rgba(255,255,255,0.8)',
     textAlign: 'center',
     marginBottom: spacing.xl,
   },
@@ -414,17 +400,5 @@ const styles = StyleSheet.create({
   optionRow: {
     flexDirection: 'row',
     marginBottom: spacing.xs,
-  },
-  celebration: {
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  celebrationText: {
-    fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.extraBold,
-    color: colors.primaryDark,
-    textShadowColor: 'rgba(0,0,0,0.1)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 4,
   },
 });

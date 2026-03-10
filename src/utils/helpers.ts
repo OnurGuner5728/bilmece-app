@@ -20,9 +20,9 @@ export function getDifficultyLabel(difficulty: Difficulty): string {
 
 export function getAgeGroupEmoji(ageGroup: AgeGroup): string {
   const emojis: Record<AgeGroup, string> = {
-    '4-6': '\uD83D\uDC76',
-    '7-9': '\uD83E\uDDD2',
-    '10-12': '\uD83E\uDDD1',
+    '4-6': '\uD83D\uDC23',
+    '7-9': '\uD83E\uDD8A',
+    '10-12': '\uD83E\uDD81',
   };
   return emojis[ageGroup];
 }
@@ -51,17 +51,4 @@ export function shouldShowAd(riddlesSinceLastAd: number): boolean {
 
 export function formatScore(score: number): string {
   return score.toLocaleString('tr-TR');
-}
-
-export function getTimeGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'Günaydın';
-  if (hour < 18) return 'İyi günler';
-  return 'İyi akşamlar';
-}
-
-export function generateSessionId(): string {
-  const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substring(2, 8);
-  return `${timestamp}-${random}`;
 }

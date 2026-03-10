@@ -12,6 +12,7 @@ import { fonts } from '../theme/fonts';
 import { borderRadius, spacing } from '../theme/spacing';
 import { getAgeGroupLabel, getAgeGroupEmoji } from '../utils/helpers';
 import { EmojiImage } from './EmojiImage';
+import { RealImage } from './RealImage';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -21,6 +22,36 @@ interface AgeGroupCardProps {
   riddleCount?: number;
   solvedCount?: number;
 }
+
+function StarProgress({ solved, total }: { solved: number; total: number }) {
+  const maxStars = 5;
+  const ratio = total > 0 ? solved / total : 0;
+  const filledStars = Math.round(ratio * maxStars);
+  return (
+    <View style={starStyles.container}>
+      {Array.from({ length: maxStars }).map((_, i) => (
+        <Text key={i} style={[starStyles.star, i < filledStars && starStyles.starFilled]}>
+          {i < filledStars ? '\u2B50' : '\u2606'}
+        </Text>
+      ))}
+    </View>
+  );
+}
+
+const starStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 2,
+    marginTop: spacing.xs,
+  },
+  star: {
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.5)',
+  },
+  starFilled: {
+    color: '#FCD34D',
+  },
+});
 
 export function AgeGroupCard({ ageGroup, onPress, riddleCount, solvedCount }: AgeGroupCardProps) {
   const colorScheme = ageGroupColors[ageGroup];
@@ -48,17 +79,31 @@ export function AgeGroupCard({ ageGroup, onPress, riddleCount, solvedCount }: Ag
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
-        <EmojiImage emoji={getAgeGroupEmoji(ageGroup)} size={48} style={styles.emojiImage} />
-        <Text style={styles.label}>{getAgeGroupLabel(ageGroup)}</Text>
-        {riddleCount !== undefined && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {solvedCount !== undefined
-                ? `${solvedCount}/${riddleCount} çözüldü`
-                : `${riddleCount} bilmece`}
-            </Text>
-          </View>
-        )}
+        <View style={styles.iconCircle}>
+          <RealImage
+            imageKey={ageGroup === '4-6' ? 'cocuk_46' : ageGroup === '7-9' ? 'cocuk_79' : 'cocuk_1012'}
+            emoji={getAgeGroupEmoji(ageGroup)}
+            size={52}
+            style={{ borderRadius: 26 }}
+          />
+        </View>
+        <View style={styles.textArea}>
+          <Text style={styles.label}>{getAgeGroupLabel(ageGroup)}</Text>
+          {riddleCount !== undefined && solvedCount !== undefined && (
+            <>
+              <StarProgress solved={solvedCount} total={riddleCount} />
+              <Text style={styles.progressText}>
+                {solvedCount}/{riddleCount} tamamland\u0131
+              </Text>
+            </>
+          )}
+          {riddleCount !== undefined && solvedCount === undefined && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{riddleCount} bilmece</Text>
+            </View>
+          )}
+        </View>
+        <Text style={styles.arrow}>{'\u203A'}</Text>
       </LinearGradient>
     </AnimatedTouchable>
   );
@@ -69,36 +114,58 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.xl,
     overflow: 'hidden',
     marginVertical: spacing.sm,
-    elevation: 4,
+    elevation: 6,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
   },
   gradient: {
-    padding: spacing.xl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    minHeight: 110,
+  },
+  iconCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: 'rgba(255,255,255,0.25)',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 140,
+    marginRight: spacing.md,
   },
-  emojiImage: {
-    marginBottom: spacing.sm,
+  textArea: {
+    flex: 1,
   },
   label: {
     fontSize: fonts.sizes.xl,
-    fontWeight: fonts.weights.bold,
+    fontWeight: fonts.weights.extraBold,
     color: '#FFFFFF',
   },
+  progressText: {
+    fontSize: fonts.sizes.xs,
+    color: 'rgba(255,255,255,0.85)',
+    marginTop: 2,
+  },
   badge: {
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
     backgroundColor: 'rgba(255,255,255,0.3)',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderRadius: borderRadius.round,
+    alignSelf: 'flex-start',
   },
   badgeText: {
     color: '#FFFFFF',
     fontSize: fonts.sizes.sm,
     fontWeight: fonts.weights.semiBold,
+  },
+  arrow: {
+    fontSize: 32,
+    color: 'rgba(255,255,255,0.7)',
+    fontWeight: fonts.weights.bold,
+    marginLeft: spacing.sm,
   },
 });

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useRef, ReactNode } from 'react';
 import { SettingsState } from '../types';
 import { StorageService } from '../services/StorageService';
 
@@ -46,16 +46,21 @@ const SettingsContext = createContext<SettingsContextValue | undefined>(undefine
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettings);
+  // Storage yüklenmeden önce default settings'in üzerine yazılmasını engelle
+  const initializedRef = useRef(false);
 
   useEffect(() => {
     StorageService.getSettings().then((saved) => {
       if (saved) {
         dispatch({ type: 'LOAD_SETTINGS', payload: saved });
       }
+      initializedRef.current = true;
     });
   }, []);
 
   useEffect(() => {
+    // İlk load tamamlanmadan kaydetme — storage'daki değerlerin üzerine yazılmasın
+    if (!initializedRef.current) return;
     StorageService.saveSettings(settings);
   }, [settings]);
 

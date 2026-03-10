@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
+import React, { useMemo, useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -20,28 +20,13 @@ import { fonts } from '../src/theme/fonts';
 import { spacing } from '../src/theme/spacing';
 import { EmojiImage } from '../src/components/EmojiImage';
 import { shouldShowAd } from '../src/utils/helpers';
-
-const INTERSTITIAL_AD_ID = __DEV__
-  ? 'ca-app-pub-3940256099942544/1033173712'       // Google resmi test ID
-  : 'ca-app-pub-9813586099759759/3222776000';       // Bilmecelerce gecis reklamı
-
-let InterstitialAd: any = null;
-let AdEventType: any = null;
-
-try {
-  const ads = require('react-native-google-mobile-ads');
-  InterstitialAd = ads.InterstitialAd;
-  AdEventType = ads.AdEventType;
-} catch {
-  // ads module not available
-}
+import { useInterstitialAd } from '../src/hooks/useInterstitialAd';
 
 export default function GameScreen() {
   const router = useRouter();
   const { state, progress, dispatch } = useGame();
   const { settings } = useSettings();
-  const interstitialRef = useRef<any>(null);
-  const interstitialLoadedRef = useRef(false);
+  const { showInterstitialAd } = useInterstitialAd();
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const filteredRiddles = useMemo(() => {
@@ -61,7 +46,7 @@ export default function GameScreen() {
         SpeechService.stop();
       };
     }
-  }, [state.currentRiddleIndex, filteredRiddles.length, settings.soundEnabled]);
+  }, [state.currentRiddleIndex, filteredRiddles.length, settings.soundEnabled, state.selectedAgeGroup]);
 
   // Cleanup auto-advance timer
   useEffect(() => {
@@ -77,44 +62,6 @@ export default function GameScreen() {
     };
   }, []);
 
-  // Interstitial ad setup (COPPA: requestNonPersonalizedAdsOnly)
-  useEffect(() => {
-    if (!InterstitialAd || Platform.OS === 'web') return;
-    try {
-      const interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_ID, {
-        requestNonPersonalizedAdsOnly: true,
-        tagForChildDirectedTreatment: true,
-        maxAdContentRating: 'G',
-      });
-      const loadedUnsub = interstitial.addAdEventListener(AdEventType.LOADED, () => {
-        interstitialLoadedRef.current = true;
-      });
-      const closedUnsub = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
-        interstitialLoadedRef.current = false;
-        interstitial.load();
-      });
-      const errorUnsub = interstitial.addAdEventListener(AdEventType.ERROR, () => {
-        interstitialLoadedRef.current = false;
-      });
-      interstitial.load();
-      interstitialRef.current = interstitial;
-      return () => {
-        loadedUnsub();
-        closedUnsub();
-        errorUnsub();
-      };
-    } catch {
-      // Ad SDK not available, skip gracefully
-    }
-  }, []);
-
-  const showInterstitialAd = useCallback(() => {
-    if (interstitialRef.current && interstitialLoadedRef.current) {
-      interstitialRef.current.show();
-      dispatch({ type: 'RESET_AD_COUNTER' });
-    }
-  }, [dispatch]);
-
   if (!state.selectedAgeGroup || !state.selectedDifficulty) {
     router.replace('/');
     return null;
@@ -123,13 +70,37 @@ export default function GameScreen() {
   const currentRiddle = filteredRiddles[state.currentRiddleIndex];
   const gradientColors = ageGroupColors[state.selectedAgeGroup]?.gradient ?? [colors.gradientStart, colors.gradientEnd];
 
+  // Play "bitti" sound when all riddles are completed
+  useEffect(() => {
+    if (!currentRiddle && settings.soundEnabled && state.selectedAgeGroup) {
+      SpeechService.speak('Tüm bilmeceleri tamamladın, tebrikler!', state.selectedAgeGroup, 'bitti');
+    }
+  }, [currentRiddle?.id, settings.soundEnabled, state.selectedAgeGroup]);
+
   if (!currentRiddle) {
+    const isEmpty = filteredRiddles.length === 0;
     return (
       <LinearGradient colors={gradientColors} style={styles.gradient}>
         <SafeAreaView style={styles.centered}>
-          <EmojiImage emoji={'\uD83C\uDF89'} size={64} style={{ marginBottom: spacing.md }} />
-          <Text style={styles.emptyText}>Tüm bilmeceleri tamamladın!</Text>
-          <Button title="Ana Sayfaya Dön" onPress={() => router.replace('/')} variant="secondary" size="large" />
+          <EmojiImage
+            emoji={isEmpty ? '\uD83D\uDD27' : '\uD83C\uDF89'}
+            size={64}
+            style={{ marginBottom: spacing.md }}
+          />
+          <Text style={styles.emptyText}>
+            {isEmpty
+              ? 'Bu seviyede henüz bilmece eklenmedi'
+              : 'Tüm bilmeceleri tamamladın!'}
+          </Text>
+          {!isEmpty && (
+            <Text style={styles.emptySubText}>Harika iş çıkardın!</Text>
+          )}
+          <Button
+            title="Ana Sayfaya Dön"
+            onPress={() => router.replace('/')}
+            variant="secondary"
+            size="large"
+          />
         </SafeAreaView>
       </LinearGradient>
     );
@@ -153,7 +124,7 @@ export default function GameScreen() {
       dispatch({ type: 'INCREMENT_STREAK' });
 
       if (settings.soundEnabled) {
-        SpeechService.speak(`Tebrikler! Doğru cevap: ${currentRiddle.answer}`, state.selectedAgeGroup!, 'tebrikler');
+        SpeechService.speak('Harika! Doğru bildin!', state.selectedAgeGroup!, 'harika');
       }
 
       autoAdvanceTimer.current = setTimeout(() => {
@@ -183,6 +154,9 @@ export default function GameScreen() {
 
   const handleToggleHint = () => {
     dispatch({ type: 'TOGGLE_HINT' });
+    if (!state.showHint && settings.soundEnabled && state.selectedAgeGroup) {
+      SpeechService.speak('İpucu!', state.selectedAgeGroup, 'ipucu');
+    }
   };
 
   return (
@@ -292,6 +266,12 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.xl,
     fontWeight: fonts.weights.bold,
     color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: spacing.xl,
+  },
+  emptySubText: {
+    fontSize: fonts.sizes.md,
+    color: 'rgba(255,255,255,0.8)',
     textAlign: 'center',
     marginBottom: spacing.xl,
   },

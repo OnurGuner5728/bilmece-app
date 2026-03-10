@@ -16,7 +16,7 @@ const AUDIO_BASE_URL =
 
 // Yaş grubuna göre expo-av oynatma hızı
 const PLAYBACK_RATE: Record<AgeGroup, number> = {
-  '4-6': 0.82,  // Yavaş, net — küçük çocuklar için
+  '4-6': 0.75,  // Yavaş, net — küçük çocuklar için
   '7-9': 0.91,  // Rahat tempo
   '10-12': 1.0, // Normal hız
 };
@@ -70,6 +70,34 @@ async function playRemoteAudio(audioId: string, ageGroup: AgeGroup): Promise<boo
   return true;
 }
 
+async function playRemoteAudioAndWait(audioId: string, ageGroup: AgeGroup): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    const url = `${AUDIO_BASE_URL}${audioId}.mp3`;
+    await configureAudio();
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: url },
+        {
+          shouldPlay: false,
+          rate: PLAYBACK_RATE[ageGroup],
+          pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
+        }
+      );
+      currentSound = sound;
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded && (status as any).didJustFinish) {
+          sound.unloadAsync().catch(() => {});
+          if (currentSound === sound) currentSound = null;
+          resolve();
+        }
+      });
+      await sound.playAsync();
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 function nativeFallback(text: string, ageGroup: AgeGroup): void {
   try {
     Speech.stop();
@@ -103,18 +131,30 @@ export const SpeechService = {
     nativeFallback(text, ageGroup);
   },
 
+  async speakSequence(
+    segments: Array<{ text: string; audioId?: string }>,
+    ageGroup: AgeGroup
+  ): Promise<void> {
+    await stopCurrentSound();
+    try { Speech.stop(); } catch {}
+
+    for (const segment of segments) {
+      if (segment.audioId) {
+        try {
+          await playRemoteAudioAndWait(segment.audioId, ageGroup);
+          continue;
+        } catch {
+          // fallback'e geç
+        }
+      }
+      // Native TTS fallback — Speech.speak async değil, 1s bekle
+      nativeFallback(segment.text, ageGroup);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    }
+  },
+
   async stop(): Promise<void> {
     await stopCurrentSound();
     try { Speech.stop(); } catch {}
-  },
-
-  async isSpeaking(): Promise<boolean> {
-    if (currentSound) {
-      try {
-        const status = await currentSound.getStatusAsync();
-        return status.isLoaded && (status as any).isPlaying;
-      } catch {}
-    }
-    try { return Speech.isSpeakingAsync(); } catch { return false; }
   },
 };

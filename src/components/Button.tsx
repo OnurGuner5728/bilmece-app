@@ -1,5 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -37,17 +38,23 @@ export function Button({
   }));
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
+    scale.value = withSpring(0.94, { damping: 15, stiffness: 300 });
   };
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 300 });
+    scale.value = withSpring(1, { damping: 12, stiffness: 250 });
   };
+
+  const isGradient = variant === 'primary' || variant === 'secondary';
+
+  const gradientColors: [string, string] = variant === 'secondary'
+    ? [colors.secondary, colors.secondaryDark]
+    : [colors.primary, colors.primaryDark];
 
   const buttonStyles = [
     styles.base,
-    styles[variant],
     styles[size],
+    !isGradient && styles[variant],
     disabled && styles.disabled,
     variant !== 'ghost' && styles.shadow,
     animatedStyle,
@@ -61,6 +68,28 @@ export function Button({
     disabled && styles.disabledText,
     textStyle,
   ];
+
+  if (isGradient && !disabled) {
+    return (
+      <AnimatedTouchable
+        style={[styles.base, styles[size], styles.shadow, animatedStyle, style]}
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled}
+        activeOpacity={0.85}
+      >
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[styles.gradientInner, styles[size]]}
+        >
+          <Text style={textStyles}>{title}</Text>
+        </LinearGradient>
+      </AnimatedTouchable>
+    );
+  }
 
   return (
     <AnimatedTouchable
@@ -80,14 +109,21 @@ const styles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: borderRadius.lg,
+    borderRadius: borderRadius.xxl,
+    overflow: 'hidden',
+  },
+  gradientInner: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: borderRadius.xxl,
   },
   shadow: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   primary: {
     backgroundColor: colors.primary,
@@ -97,29 +133,30 @@ const styles = StyleSheet.create({
   },
   outline: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
+    borderWidth: 2.5,
     borderColor: colors.primary,
   },
   ghost: {
     backgroundColor: 'transparent',
   },
   small: {
-    height: 40,
-    paddingHorizontal: spacing.md,
-  },
-  medium: {
-    height: 52,
+    height: 42,
     paddingHorizontal: spacing.lg,
   },
-  large: {
-    height: 60,
+  medium: {
+    height: 54,
     paddingHorizontal: spacing.xl,
   },
+  large: {
+    height: 62,
+    paddingHorizontal: spacing.xl + spacing.sm,
+  },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.45,
   },
   text: {
     fontWeight: fonts.weights.bold,
+    letterSpacing: 0.3,
   },
   primaryText: {
     color: colors.textOnPrimary,

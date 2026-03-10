@@ -10,7 +10,6 @@ type GameAction =
   | { type: 'PREV_RIDDLE' }
   | { type: 'SET_RIDDLE_INDEX'; payload: number }
   | { type: 'TOGGLE_HINT' }
-  | { type: 'INCREMENT_AD_COUNTER' }
   | { type: 'RESET_AD_COUNTER' }
   | { type: 'RESET_GAME' }
   | { type: 'SET_PROGRESS'; payload: UserProgress }
@@ -60,16 +59,20 @@ function gameReducer(
         game: { ...state.game, selectedAgeGroup: action.payload, currentRiddleIndex: 0 },
       };
     case 'SET_DIFFICULTY': {
-      const key = `${state.game.selectedAgeGroup}_${action.payload}`;
-      const savedIndex = state.progress.lastPositions?.[key] ?? 0;
+      const ageGroup = state.game.selectedAgeGroup;
+      const savedIndex = ageGroup && state.progress.lastPositions
+        ? (state.progress.lastPositions[`${ageGroup}_${action.payload}`] ?? 0)
+        : 0;
       return {
         ...state,
         game: { ...state.game, selectedDifficulty: action.payload, currentRiddleIndex: savedIndex },
       };
     }
     case 'SET_CATEGORY': {
-      const catKey = action.payload ?? '';
-      const savedCatIndex = state.progress.lastPositions?.[`cat_${catKey}`] ?? 0;
+      const catKey = action.payload;
+      const savedCatIndex = catKey && state.progress.lastPositions
+        ? (state.progress.lastPositions[`cat_${catKey}`] ?? 0)
+        : 0;
       return {
         ...state,
         game: { ...state.game, selectedCategory: action.payload, currentRiddleIndex: savedCatIndex },
@@ -109,11 +112,6 @@ function gameReducer(
       return {
         ...state,
         game: { ...state.game, showHint: !state.game.showHint },
-      };
-    case 'INCREMENT_AD_COUNTER':
-      return {
-        ...state,
-        game: { ...state.game, riddlesSinceLastAd: state.game.riddlesSinceLastAd + 1 },
       };
     case 'RESET_AD_COUNTER':
       return {

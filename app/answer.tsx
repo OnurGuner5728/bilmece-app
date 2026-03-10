@@ -7,6 +7,7 @@ import Animated, { BounceIn, FadeIn, ZoomIn } from 'react-native-reanimated';
 import { AdBanner } from '../src/components/AdBanner';
 import { Button } from '../src/components/Button';
 import { EmojiImage } from '../src/components/EmojiImage';
+import { RealImage } from '../src/components/RealImage';
 import { useGame } from '../src/context/GameContext';
 import { RiddleService } from '../src/services/RiddleService';
 import { ScoreService } from '../src/services/ScoreService';
@@ -22,24 +23,36 @@ export default function AnswerScreen() {
   const { settings } = useSettings();
 
   const filteredRiddles = useMemo(() => {
+    if (state.selectedCategory) {
+      return RiddleService.getFilteredByCategory(state.selectedCategory);
+    }
     if (!state.selectedAgeGroup || !state.selectedDifficulty) return [];
     return RiddleService.getFilteredRiddles(state.selectedAgeGroup, state.selectedDifficulty);
-  }, [state.selectedAgeGroup, state.selectedDifficulty]);
+  }, [state.selectedAgeGroup, state.selectedDifficulty, state.selectedCategory]);
 
   const currentRiddle = filteredRiddles[state.currentRiddleIndex];
-  const gradientColors: [string, string] = state.selectedAgeGroup
-    ? ageGroupColors[state.selectedAgeGroup]?.gradient ?? [colors.gradientStart, colors.gradientEnd]
+  const isCategoryMode = !!state.selectedCategory;
+  const ageGroupForDisplay = state.selectedAgeGroup ?? currentRiddle?.ageGroup;
+  const gradientColors: [string, string] = ageGroupForDisplay
+    ? ageGroupColors[ageGroupForDisplay]?.gradient ?? [colors.gradientStart, colors.gradientEnd]
     : [colors.gradientStart, colors.gradientEnd];
 
-  // Ses: cevabı EmelNeural sesiyle oku
+  // Ses: tebrikler sesi + cevabı EmelNeural sesiyle oku
   useEffect(() => {
-    if (currentRiddle && settings.soundEnabled && state.selectedAgeGroup) {
-      SpeechService.speak(currentRiddle.answer, state.selectedAgeGroup!, `${currentRiddle.id}_cevap`);
+    const ageGroup = state.selectedAgeGroup ?? currentRiddle?.ageGroup;
+    if (currentRiddle && settings.soundEnabled && ageGroup) {
+      SpeechService.speakSequence(
+        [
+          { text: 'Tebrikler!', audioId: 'tebrikler' },
+          { text: currentRiddle.answer, audioId: `${currentRiddle.id}_cevap` },
+        ],
+        ageGroup
+      );
     }
     return () => {
       SpeechService.stop();
     };
-  }, [currentRiddle, settings.soundEnabled, state.selectedAgeGroup]);
+  }, [currentRiddle?.id, settings.soundEnabled, state.selectedAgeGroup]);
 
   // Rozet kontrolü: yeni kazanılan rozetleri kaydet
   useEffect(() => {
@@ -47,22 +60,22 @@ export default function AnswerScreen() {
     if (newBadges.length > 0) {
       dispatch({ type: 'AWARD_BADGES', payload: newBadges });
     }
-  }, []);
+  }, [progress.solvedRiddles.length, progress.totalScore, progress.currentStreak]);
 
-  if (!currentRiddle || !state.selectedAgeGroup || !state.selectedDifficulty) {
+  if (!currentRiddle || (!isCategoryMode && (!state.selectedAgeGroup || !state.selectedDifficulty))) {
     router.replace('/');
     return null;
   }
 
   const score = ScoreService.calculateScore(
-    state.selectedDifficulty,
+    state.selectedDifficulty ?? currentRiddle.difficulty,
     state.showHint,
     progress.currentStreak
   );
 
   const handleNext = () => {
     dispatch({ type: 'NEXT_RIDDLE' });
-    router.replace('/game');
+    router.replace(isCategoryMode ? '/category' : '/game');
   };
 
   const handleHome = () => {
@@ -77,7 +90,7 @@ export default function AnswerScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.content}>
           <Animated.View entering={BounceIn.duration(800)}>
-            <EmojiImage emoji={currentRiddle.answerEmoji} size={100} />
+            <RealImage imageKey={currentRiddle.answerImage} emoji={currentRiddle.answerEmoji} size={100} />
           </Animated.View>
 
           <Animated.Text entering={FadeIn.delay(400).duration(500)} style={styles.answer}>
@@ -134,7 +147,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: spacing.xl,
   },
-  answerEmoji: { marginBottom: spacing.md },
   answer: {
     fontSize: fonts.sizes.xxl,
     fontWeight: fonts.weights.extraBold,

@@ -9,11 +9,12 @@ import { ScoreService } from '../src/services/ScoreService';
 import { AdBanner } from '../src/components/AdBanner';
 import { AgeGroup } from '../src/types';
 import { EmojiImage } from '../src/components/EmojiImage';
-import { colors } from '../src/theme/colors';
+import { colors, ageGroupColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { borderRadius, spacing } from '../src/theme/spacing';
 
 const AGE_GROUPS: AgeGroup[] = ['4-6', '7-9', '10-12'];
+const AGE_MASKS: Record<string, string> = { '4-6': '\uD83D\uDC23', '7-9': '\uD83E\uDD8A', '10-12': '\uD83E\uDD81' };
 
 const BADGE_DEFINITIONS = [
   { id: 'first_solve', name: 'İlk Adım', emoji: '\u2B50', description: 'İlk bilmeceyi çöz!' },
@@ -102,13 +103,16 @@ export default function ScoreScreen() {
               return (
                 <View key={ag} style={styles.progressItem}>
                   <View style={styles.progressHeader}>
-                    <Text style={styles.progressLabel}>{ag} Yaş</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <EmojiImage emoji={AGE_MASKS[ag]} size={20} />
+                      <Text style={styles.progressLabel}>{ag} Yaş</Text>
+                    </View>
                     <Text style={styles.progressValue}>
                       {solved}/{total} ({pct}%)
                     </Text>
                   </View>
                   <View style={styles.progressTrack}>
-                    <View style={[styles.progressFill, { width: `${pct}%` as any }]} />
+                    <View style={[styles.progressFill, { width: `${pct}%` as any, backgroundColor: ageGroupColors[ag]?.gradient[0] ?? colors.primary }]} />
                   </View>
                 </View>
               );
