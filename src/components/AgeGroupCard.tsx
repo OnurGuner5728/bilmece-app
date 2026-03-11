@@ -11,7 +11,6 @@ import { ageGroupColors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 import { borderRadius, spacing } from '../theme/spacing';
 import { getAgeGroupLabel, getAgeGroupEmoji } from '../utils/helpers';
-import { EmojiImage } from './EmojiImage';
 import { RealImage } from './RealImage';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);

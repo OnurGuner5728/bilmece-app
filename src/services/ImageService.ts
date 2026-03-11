@@ -72,7 +72,7 @@ const CURATED: Record<string, string> = {
   ayı: UNSPLASH_PHOTO('1525382455947-f319bc05fb35'),
   bülbül: UNSPLASH_PHOTO('1452570053594-1b985d6ea890'),
   midye: UNSPLASH_PHOTO('1590759668628-05b0fc34bb70'),
-  'i̇pekböceği': UNSPLASH_PHOTO('1558642452-9d2a7deb7f62'),
+  // 'i̇pekböceği': removed — karınca/arı fotoğrafı kullanılıyordu, ipekböceği tırtıl görünümlü → emoji fallback
   'sinek_kuşu': UNSPLASH_PHOTO('1520808663317-647b476a81b9'),
   'sinek kuşu': UNSPLASH_PHOTO('1520808663317-647b476a81b9'),
   'ağustos_böceği': UNSPLASH_PHOTO('1558642452-9d2a7deb7f62'),
@@ -169,17 +169,17 @@ const CURATED: Record<string, string> = {
   sis: UNSPLASH_PHOTO('1485236715568-ddc5ee6ca227'),
   ateş: UNSPLASH_PHOTO('1475552113915-6fcb52652ba2'),
   buz: UNSPLASH_PHOTO('1491002052546-bf38f186af56'),
-  lav: UNSPLASH_PHOTO('1462275646964-a0e3c11f18a6'),
+  // lav: removed — kelebek fotoğrafı kullanılıyordu, lav = erimiş magma → emoji fallback
   sel: UNSPLASH_PHOTO('1515694346937-94d85e41e6f0'),
   ada: UNSPLASH_PHOTO('1559128010-7c1ad6e1b6a5'),
   vadi: UNSPLASH_PHOTO('1464822759023-fed622ff2c3b'),
-  gölge: UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
-  çim: UNSPLASH_PHOTO('1416879595882-3373a0480b5b'),
+  // gölge: removed — güneş fotoğrafı kullanılıyordu, gölge ayrı bir kavram → emoji fallback
+  // çim: removed — toprak fotoğrafı kullanılıyordu, çim = yeşil ot ≠ toprak → emoji fallback
   'kuzey_ışıkları': UNSPLASH_PHOTO('1483728642387-6c3bdd6c93e5'),
   'kuzey ışıkları': UNSPLASH_PHOTO('1483728642387-6c3bdd6c93e5'),
   'kutup_yıldızı': UNSPLASH_PHOTO('1419242902214-272b3f66ee7a'),
   'kutup yıldızı': UNSPLASH_PHOTO('1419242902214-272b3f66ee7a'),
-  fosil: UNSPLASH_PHOTO('1462275646964-a0e3c11f18a6'),
+  // fosil: removed — kelebek fotoğrafı kullanılıyordu, tamamen alakasız → emoji fallback
   şafak: UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
   'gün_batımı': UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
   'gün batımı': UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
@@ -205,7 +205,7 @@ const CURATED: Record<string, string> = {
   tarak: UNSPLASH_PHOTO('1522338242992-e1a54571a17c'),
   ampul: UNSPLASH_PHOTO('1550985543-49bee3167284'),
   şemsiye: UNSPLASH_PHOTO('1534509596891-861fbc53e54c'),
-  ayna: UNSPLASH_PHOTO('1555041469-a586c28b2a8b'),
+  // ayna: removed — masa/mobilya fotoğrafı kullanılıyordu, ayna ≠ masa → emoji fallback
   telefon: UNSPLASH_PHOTO('1511707171634-5f897ff02aa9'),
   okul: UNSPLASH_PHOTO('1580582932707-520aed937b7b'),
   saat: UNSPLASH_PHOTO('1495364141860-b0d03eccd065'),
@@ -327,7 +327,7 @@ const CURATED: Record<string, string> = {
   el: UNSPLASH_PHOTO('1576086476234-1103be98f096'),
   saç: UNSPLASH_PHOTO('1522337360788-8b13dee7a37e'),
   kafa: UNSPLASH_PHOTO('1531746790731-6c087fecd65a'),
-  karın: UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
+  // karın: removed — ayak fotoğrafı kullanılıyordu, karın ≠ ayak → emoji fallback
   omurga: UNSPLASH_PHOTO('1559757148-5c350d0d3c56'),
   damar: UNSPLASH_PHOTO('1559757148-5c350d0d3c56'),
   'göz_bebeği': UNSPLASH_PHOTO('1494869042583-f6c911f04b4c'),
@@ -368,7 +368,7 @@ const CURATED: Record<string, string> = {
   çekmece: UNSPLASH_PHOTO('1555041469-a586c28b2a8b'),
   sehpa: UNSPLASH_PHOTO('1555041469-a586c28b2a8b'),
   mikrodalga: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
-  buzdolabı: UNSPLASH_PHOTO('1557148959-a35d55cf2bce'),
+  // buzdolabı: removed — soba/fırın fotoğrafı kullanılıyordu, kavramsal zıt (soğutur ≠ ısıtır) → emoji fallback
   // çöp_kamyonu: removed — wrong photo ID → emoji fallback
   // vantilatör: removed — wrong photo ID → emoji fallback
   sünger: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
@@ -408,43 +408,43 @@ const CURATED: Record<string, string> = {
   kelime: UNSPLASH_PHOTO('1513542789411-b6a5d4f31634'),
   resim: UNSPLASH_PHOTO('1513542789411-b6a5d4f31634'),
   harita: UNSPLASH_PHOTO('1451187580459-43490279c0fa'),
-  bulmaca: UNSPLASH_PHOTO('1551698618-1dfe5d97d256'),
+  // bulmaca: removed — kayak/kış sporu fotoğrafı kullanılıyordu, bulmaca ≠ kayak → emoji fallback
   satranç: UNSPLASH_PHOTO('1528819622765-d6bcf132f793'),
   'okul_zili': UNSPLASH_PHOTO('1580582932707-520aed937b7b'),
   klavye: UNSPLASH_PHOTO('1496181133206-80ce9b88a853'),
-  'ip_atlama': UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
+  // 'ip_atlama': removed — ayak fotoğrafı kullanılıyordu, ip atlama ≠ ayak → emoji fallback
   kayak: UNSPLASH_PHOTO('1551698618-1dfe5d97d256'),
   'buz_pateni': UNSPLASH_PHOTO('1551698618-1dfe5d97d256'),
   'kum_kalesi': UNSPLASH_PHOTO('1507525428034-b723cf961d3e'),
-  salıncak: UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
+  // salıncak: removed — ayak fotoğrafı kullanılıyordu, salıncak ≠ ayak → emoji fallback
 
   // --- Food & Drinks Extra ---
   'doğum_günü': UNSPLASH_PHOTO('1558301211-0d8c8ddee6ec'),
   yemek: UNSPLASH_PHOTO('1565299624946-b28f40a0ae38'),
-  sakız: UNSPLASH_PHOTO('1563729784474-d77dbb933a9e'),
+  // sakız: removed — fındık fotoğrafı kullanılıyordu, sakız ≠ fındık → emoji fallback
 
   // --- Nature Extra ---
   kömür: UNSPLASH_PHOTO('1494546481285-6eb90d49bd00'),
   baca: UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
   tuğla: UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
   dolu: UNSPLASH_PHOTO('1491002052546-bf38f186af56'),
-  çit: UNSPLASH_PHOTO('1416879595882-3373a0480b5b'),
+  // çit: removed — toprak fotoğrafı kullanılıyordu, çit = ahşap/tel çit ≠ toprak → emoji fallback
   çukur: UNSPLASH_PHOTO('1416879595882-3373a0480b5b'),
   yol: UNSPLASH_PHOTO('1494546481285-6eb90d49bd00'),
   petrol: UNSPLASH_PHOTO('1494546481285-6eb90d49bd00'),
-  'statik': UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
+  // 'statik': removed — güneş fotoğrafı kullanılıyordu, tamamen alakasız fizik kavramı → emoji fallback
   buharlaşma: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   serap: UNSPLASH_PHOTO('1507525428034-b723cf961d3e'),
-  'yel_değirmeni': UNSPLASH_PHOTO('1502082553048-f009c37129b9'),
+  // 'yel_değirmeni': removed — ağaç/orman fotoğrafı kullanılıyordu, yel değirmeni ≠ ağaç → emoji fallback
   cam: UNSPLASH_PHOTO('1517991104123-1d56a6e81ed9'),
-  kepçe: UNSPLASH_PHOTO('1558618047-3c8c76ca4d19'),
-  bumerang: UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
+  // kepçe: removed — motosiklet fotoğrafı kullanılıyordu, kepçe ≠ motosiklet → emoji fallback
+  // bumerang: removed — ayak fotoğrafı kullanılıyordu, bumerang ≠ ayak → emoji fallback
   'çeşme': UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
 
   // --- Missing keys ---
   gözyaşı: UNSPLASH_PHOTO('1494869042583-f6c911f04b4c'),
-  çivi: UNSPLASH_PHOTO('1558618047-3c8c76ca4d19'),
-  asansör: UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
+  // çivi: removed — motosiklet fotoğrafı kullanılıyordu, çivi ≠ araç → emoji fallback
+  // asansör: removed — küçük ev dış cephesi fotoğrafı kullanılıyordu, asansör ≠ ev → emoji fallback
   'i̇nsan': UNSPLASH_PHOTO('1476703925-39c2438f2bce'),
   insan: UNSPLASH_PHOTO('1476703925-39c2438f2bce'),
   // 'i̇ğne': removed — wrong photo ID → emoji fallback
@@ -455,8 +455,8 @@ const CURATED: Record<string, string> = {
   'saat ibresi': UNSPLASH_PHOTO('1495364141860-b0d03eccd065'),
   şişe: UNSPLASH_PHOTO('1548839140-29a749e1cf4d'),
   zil: UNSPLASH_PHOTO('1580582932707-520aed937b7b'),
-  yüzme: UNSPLASH_PHOTO('1551958219-acbc608c6377'),
-  balta: UNSPLASH_PHOTO('1558618047-3c8c76ca4d19'),
+  // yüzme: removed — top fotoğrafı kullanılıyordu, yüzme ≠ top → emoji fallback
+  // balta: removed — motosiklet fotoğrafı kullanılıyordu, balta ≠ araç → emoji fallback
   kızak: UNSPLASH_PHOTO('1551698618-1dfe5d97d256'),
 
   // --- Abstract / Actions ---
@@ -473,14 +473,14 @@ const CURATED: Record<string, string> = {
   postacı: UNSPLASH_PHOTO('1579187707643-35646d22b596'),
   'i̇sim': UNSPLASH_PHOTO('1513542789411-b6a5d4f31634'),
   // sır: removed — wrong photo ID → emoji fallback
-  'gökdelen': UNSPLASH_PHOTO('1564013799919-ab600027ffc6'),
-  tura: UNSPLASH_PHOTO('1446776811953-b23d57bd21aa'),
-  nara: UNSPLASH_PHOTO('1506905925346-21bda4d32df4'),
-  'trafik_lambası': UNSPLASH_PHOTO('1550985543-49bee3167284'),
-  'i̇p_atlama': UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
-  makas: UNSPLASH_PHOTO('1513542789411-b6a5d4f31634'),
+  // 'gökdelen': removed — küçük ev fotoğrafı kullanılıyordu, gökdelen ≠ küçük ev → emoji fallback
+  // tura: removed — uzay/dünya fotoğrafı kullanılıyordu, tura ≠ uzay → emoji fallback
+  // nara: removed — güneş fotoğrafı kullanılıyordu, tamamen alakasız → emoji fallback
+  // 'trafik_lambası': removed — ampul fotoğrafı kullanılıyordu, trafik lambası ≠ ampul → emoji fallback
+  // 'i̇p_atlama': removed — ayak fotoğrafı kullanılıyordu, ip atlama ≠ ayak → emoji fallback
+  // makas: removed — kalem fotoğrafı kullanılıyordu, makas ≠ kalem → emoji fallback
   'ayak_izi': UNSPLASH_PHOTO('1476480862126-209bfaa8edc8'),
-  kaktüs: UNSPLASH_PHOTO('1459411552884-841db9b3cc2a'),
+  // kaktüs: removed — ördek fotoğrafı kullanılıyordu, tamamen yanlış (ayrıca üstte yorum satırı çelişkisi vardı) → emoji fallback
 };
 
 /**

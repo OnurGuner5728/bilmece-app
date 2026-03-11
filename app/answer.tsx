@@ -37,7 +37,6 @@ export default function AnswerScreen() {
     ? ageGroupColors[ageGroupForDisplay]?.gradient ?? [colors.gradientStart, colors.gradientEnd]
     : [colors.gradientStart, colors.gradientEnd];
 
-  // Ses: tebrikler sesi + cevabı EmelNeural sesiyle oku
   useEffect(() => {
     const ageGroup = state.selectedAgeGroup ?? currentRiddle?.ageGroup;
     if (currentRiddle && settings.soundEnabled && ageGroup) {
@@ -54,7 +53,6 @@ export default function AnswerScreen() {
     };
   }, [currentRiddle?.id, settings.soundEnabled, state.selectedAgeGroup]);
 
-  // Rozet kontrolü: yeni kazanılan rozetleri kaydet
   useEffect(() => {
     const newBadges = ScoreService.checkBadges(progress);
     if (newBadges.length > 0) {
@@ -105,18 +103,18 @@ export default function AnswerScreen() {
 
           <Animated.View entering={FadeIn.delay(900).duration(500)} style={styles.confettiContainer}>
             <View style={styles.confettiRow}>
-              <EmojiImage emoji={'\uD83C\uDF89'} size={32} />
-              <EmojiImage emoji={'\uD83C\uDF8A'} size={32} />
-              <EmojiImage emoji={'\u2B50'} size={32} />
-              <EmojiImage emoji={'\uD83C\uDF1F'} size={32} />
-              <EmojiImage emoji={'\uD83C\uDF89'} size={32} />
+              <EmojiImage emoji="🎉" size={32} />
+              <EmojiImage emoji="🎊" size={32} />
+              <EmojiImage emoji="⭐" size={32} />
+              <EmojiImage emoji="🌟" size={32} />
+              <EmojiImage emoji="🎉" size={32} />
             </View>
           </Animated.View>
 
           <View style={styles.actions}>
             {!isLast && (
               <Button
-                title={'\u27A1 Sonraki Bilmece'}
+                title="➡ Sonraki Bilmece"
                 onPress={handleNext}
                 variant="primary"
                 size="large"

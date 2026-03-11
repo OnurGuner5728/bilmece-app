@@ -83,7 +83,7 @@ export default function GameScreen() {
       <LinearGradient colors={gradientColors} style={styles.gradient}>
         <SafeAreaView style={styles.centered}>
           <EmojiImage
-            emoji={isEmpty ? '\uD83D\uDD27' : '\uD83C\uDF89'}
+            emoji={isEmpty ? '🔧' : '🎉'}
             size={64}
             style={{ marginBottom: spacing.md }}
           />
@@ -132,6 +132,7 @@ export default function GameScreen() {
         if (shouldShowAd(state.riddlesSinceLastAd)) {
           showInterstitialAd();
         }
+        dispatch({ type: 'RESET_AD_COUNTER' });
         router.push('/answer');
       }, 800);
     } else {
@@ -183,7 +184,7 @@ export default function GameScreen() {
               onPress={() => dispatch({ type: 'PREV_RIDDLE' })}
               disabled={state.currentRiddleIndex <= 0}
             >
-              <Text style={styles.navArrow}>{'\u25C0'}</Text>
+              <Text style={styles.navArrow}>{'◀'}</Text>
             </TouchableOpacity>
             <Text style={styles.navCount}>{state.currentRiddleIndex + 1} / {filteredRiddles.length}</Text>
             <TouchableOpacity
@@ -191,7 +192,7 @@ export default function GameScreen() {
               onPress={() => dispatch({ type: 'NEXT_RIDDLE' })}
               disabled={!(state.isAnswered || progress.solvedRiddles.includes(currentRiddle.id))}
             >
-              <Text style={styles.navArrow}>{'\u25B6'}</Text>
+              <Text style={styles.navArrow}>{'▶'}</Text>
             </TouchableOpacity>
           </View>
 
@@ -201,7 +202,7 @@ export default function GameScreen() {
               <View style={styles.questionHeader}>
                 <Text style={styles.category}>{currentRiddle.category.toUpperCase()}</Text>
                 <TouchableOpacity onPress={handleSpeakRiddle} style={styles.speakerButton}>
-                  <Text style={styles.speakerIcon}>{'\uD83D\uDD0A'}</Text>
+                  <Text style={styles.speakerIcon}>{'🔊'}</Text>
                 </TouchableOpacity>
               </View>
               <Text style={styles.questionText}>{currentRiddle.question}</Text>
@@ -212,7 +213,7 @@ export default function GameScreen() {
                 </View>
               ) : (
                 <TouchableOpacity style={styles.hintButton} onPress={handleToggleHint}>
-                  <Text style={styles.hintButtonText}>{'\uD83D\uDCA1'} İpucu</Text>
+                  <Text style={styles.hintButtonText}>{'💡'} İpucu</Text>
                 </TouchableOpacity>
               )}
             </Animated.View>

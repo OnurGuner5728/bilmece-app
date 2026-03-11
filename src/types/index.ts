@@ -46,13 +46,11 @@ export interface GameState {
   riddlesSinceLastAd: number;
   selectedAnswer: AnswerOption | null;
   isAnswered: boolean;
-  isCorrect: boolean;
 }
 
 export interface SettingsState {
   soundEnabled: boolean;
   musicEnabled: boolean;
-  notificationsEnabled: boolean;
   parentalControlEnabled: boolean;
   parentalPin: string;
 }

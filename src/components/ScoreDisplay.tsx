@@ -57,7 +57,7 @@ export function ScoreDisplay({ totalScore, currentStreak, solvedCount }: ScoreDi
 
       <Animated.View style={[styles.statItem, styles.streakItem, streakAnimStyle]}>
         <View style={[styles.iconCircle, currentStreak >= 3 && styles.fireCircle]}>
-          <EmojiImage emoji={currentStreak >= 3 ? '\uD83D\uDD25' : '\uD83D\uDD25'} size={20} />
+          <EmojiImage emoji={currentStreak >= 3 ? '\uD83D\uDD25' : '\u26A1'} size={20} />
         </View>
         <Text style={[styles.statValue, currentStreak >= 3 && styles.streakHighlight]}>
           {currentStreak}

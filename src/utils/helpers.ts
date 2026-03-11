@@ -27,28 +27,6 @@ export function getAgeGroupEmoji(ageGroup: AgeGroup): string {
   return emojis[ageGroup];
 }
 
-export function getDifficultyEmoji(difficulty: Difficulty): string {
-  const emojis: Record<Difficulty, string> = {
-    kolay: '\u2B50',
-    orta: '\u2B50\u2B50',
-    zor: '\u2B50\u2B50\u2B50',
-  };
-  return emojis[difficulty];
-}
-
-export function shuffleArray<T>(array: T[]): T[] {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
 export function shouldShowAd(riddlesSinceLastAd: number): boolean {
   return riddlesSinceLastAd >= 5;
-}
-
-export function formatScore(score: number): string {
-  return score.toLocaleString('tr-TR');
 }

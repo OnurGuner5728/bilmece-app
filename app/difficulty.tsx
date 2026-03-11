@@ -38,7 +38,7 @@ export default function DifficultyScreen() {
       <SafeAreaView style={styles.safe} edges={['bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Text style={styles.backText}>{'\u2190'}</Text>
+            <Text style={styles.backText}>←</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Zorluk Seç</Text>
           <Text style={styles.subtitle}>{ageGroup} yaş grubu</Text>

@@ -65,7 +65,9 @@ export default function SettingsScreen() {
 
     if (pinModalMode === 'setup') {
       settingsDispatch({ type: 'SET_PIN', payload: pinInput });
-      settingsDispatch({ type: 'TOGGLE_PARENTAL_CONTROL' });
+      if (!settings.parentalControlEnabled) {
+        settingsDispatch({ type: 'TOGGLE_PARENTAL_CONTROL' });
+      }
       closePinModal();
     } else if (pinModalMode === 'verify') {
       if (pinInput === settings.parentalPin) {
@@ -78,7 +80,12 @@ export default function SettingsScreen() {
     } else if (pinModalMode === 'change') {
       if (pinInput === settings.parentalPin) {
         closePinModal();
-        setTimeout(() => openPinModal('setup'), 300);
+        setTimeout(() => {
+          setPinInput('');
+          setPinError('');
+          setPinModalMode('setup');
+          setPinModalVisible(true);
+        }, 300);
       } else {
         setPinError('Yanl\u0131\u015F PIN. Tekrar deneyin.');
         setPinInput('');
@@ -234,7 +241,7 @@ export default function SettingsScreen() {
           {/* Footer with version */}
           <View style={styles.footer}>
             <Text style={styles.version}>Bilmecelerce v{APP_VERSION}</Text>
-            <Text style={styles.copyright}>{'\u00C7'}ocuklar i{'\u00E7'}in e{'\u011F'}itici bilmece oyunu</Text>
+            <Text style={styles.copyright}>Çocuklar için eğitici bilmece oyunu</Text>
           </View>
         </ScrollView>
         <AdBanner />
@@ -268,7 +275,7 @@ export default function SettingsScreen() {
             {pinError ? <Text style={styles.errorText}>{pinError}</Text> : null}
             <View style={styles.modalButtons}>
               <TouchableOpacity style={styles.modalCancelButton} onPress={closePinModal}>
-                <Text style={styles.modalCancelText}>{'\u0130'}ptal</Text>
+                <Text style={styles.modalCancelText}>İptal</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.modalConfirmButton} onPress={handlePinSubmit}>
                 <Text style={styles.modalConfirmText}>Onayla</Text>
@@ -324,11 +331,6 @@ const styles = StyleSheet.create({
     fontSize: fonts.sizes.md,
     color: colors.text,
     fontWeight: fonts.weights.medium,
-  },
-  comingSoon: {
-    fontSize: fonts.sizes.xs,
-    color: colors.textLight,
-    marginTop: 2,
   },
   changePinButton: {
     marginTop: spacing.sm,

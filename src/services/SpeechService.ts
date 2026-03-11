@@ -1,4 +1,4 @@
-import { Audio } from 'expo-av';
+import { Audio, AVPlaybackStatusSuccess } from 'expo-av';
 import * as Speech from 'expo-speech';
 import { AgeGroup } from '../types';
 
@@ -60,9 +60,13 @@ async function playRemoteAudio(audioId: string, ageGroup: AgeGroup): Promise<boo
       pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
     }
   );
+  if (currentSound !== null) {
+    sound.unloadAsync().catch(() => {});
+    return false;
+  }
   currentSound = sound;
   sound.setOnPlaybackStatusUpdate((status) => {
-    if (status.isLoaded && (status as any).didJustFinish) {
+    if (status.isLoaded && (status as AVPlaybackStatusSuccess).didJustFinish) {
       stopCurrentSound();
     }
   });
@@ -71,30 +75,30 @@ async function playRemoteAudio(audioId: string, ageGroup: AgeGroup): Promise<boo
 }
 
 async function playRemoteAudioAndWait(audioId: string, ageGroup: AgeGroup): Promise<void> {
-  return new Promise(async (resolve, reject) => {
-    const url = `${AUDIO_BASE_URL}${audioId}.mp3`;
-    await configureAudio();
-    try {
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: url },
-        {
-          shouldPlay: false,
-          rate: PLAYBACK_RATE[ageGroup],
-          pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
-        }
-      );
-      currentSound = sound;
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && (status as any).didJustFinish) {
-          sound.unloadAsync().catch(() => {});
-          if (currentSound === sound) currentSound = null;
-          resolve();
-        }
-      });
-      await sound.playAsync();
-    } catch (e) {
-      reject(e);
+  const url = `${AUDIO_BASE_URL}${audioId}.mp3`;
+  await configureAudio();
+  const { sound } = await Audio.Sound.createAsync(
+    { uri: url },
+    {
+      shouldPlay: false,
+      rate: PLAYBACK_RATE[ageGroup],
+      pitchCorrectionQuality: Audio.PitchCorrectionQuality.High,
     }
+  );
+  currentSound = sound;
+  await new Promise<void>((resolve) => {
+    sound.setOnPlaybackStatusUpdate((status) => {
+      if (status.isLoaded && (status as AVPlaybackStatusSuccess).didJustFinish) {
+        sound.unloadAsync().catch(() => {});
+        if (currentSound === sound) currentSound = null;
+        resolve();
+      }
+    });
+    sound.playAsync().catch(() => {
+      sound.unloadAsync().catch(() => {});
+      if (currentSound === sound) currentSound = null;
+      resolve();
+    });
   });
 }
 

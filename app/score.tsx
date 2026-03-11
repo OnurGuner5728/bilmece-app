@@ -112,7 +112,7 @@ export default function ScoreScreen() {
                     </Text>
                   </View>
                   <View style={styles.progressTrack}>
-                    <View style={[styles.progressFill, { width: `${pct}%` as any, backgroundColor: ageGroupColors[ag]?.gradient[0] ?? colors.primary }]} />
+                    <View style={[styles.progressFill, { width: `${pct}%` as `${number}%`, backgroundColor: ageGroupColors[ag]?.gradient[0] ?? colors.primary }]} />
                   </View>
                 </View>
               );

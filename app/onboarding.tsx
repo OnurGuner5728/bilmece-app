@@ -110,7 +110,7 @@ export default function OnboardingScreen() {
         <Animated.View entering={FadeIn.duration(600)} style={styles.header}>
           <Text style={styles.appTitle}>Bilmecelerce</Text>
           <Text style={styles.appSubtitle}>
-            {'\u00C7'}ocuklar i{'\u00E7'}in e{'\u011F'}lenceli bilmece oyunu
+            Çocuklar için eğlenceli bilmece oyunu
           </Text>
         </Animated.View>
 
@@ -154,7 +154,7 @@ export default function OnboardingScreen() {
                 end={{ x: 1, y: 0 }}
                 style={styles.startButtonGradient}
               >
-                <Text style={styles.startButtonText}>Ba{'\u015F'}layal{'\u0131'}m!</Text>
+                <Text style={styles.startButtonText}>Başlayalım!</Text>
               </LinearGradient>
             </TouchableOpacity>
           ) : (

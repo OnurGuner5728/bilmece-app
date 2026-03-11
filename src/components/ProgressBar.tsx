@@ -37,7 +37,7 @@ export function ProgressBar({
   }, [current, total]);
 
   const fillStyle = useAnimatedStyle(() => ({
-    width: `${Math.min(progress.value * 100, 100)}%` as any,
+    width: `${Math.min(progress.value * 100, 100)}%` as `${number}%`,
   }));
 
   const labelAnimStyle = useAnimatedStyle(() => ({

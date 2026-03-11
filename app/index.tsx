@@ -17,7 +17,7 @@ import { fonts } from '../src/theme/fonts';
 import { spacing, borderRadius } from '../src/theme/spacing';
 
 const AGE_GROUPS: AgeGroup[] = ['4-6', '7-9', '10-12'];
-const CATEGORIES = ['hayvanlar', 'yiyecek', 'do\u011Fa', 'e\u015Fyalar', 'v\u00FCcut', 'ara\u00E7lar'];
+const CATEGORIES = ['hayvanlar', 'yiyecek', 'doğa', 'eşyalar', 'vücut', 'araçlar'];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function HomeScreen() {
               <EmojiImage emoji={'\uD83E\uDD89'} size={44} />
             </Animated.View>
             <Text style={styles.title}>Bilmecelerce</Text>
-            <Text style={styles.subtitle}>Ya\u015F grubunu se\u00E7 ve oynamaya ba\u015Fla!</Text>
+            <Text style={styles.subtitle}>Yaş grubunu seç ve oynamaya başla!</Text>
           </View>
 
           <ScoreDisplay
@@ -87,7 +87,7 @@ export default function HomeScreen() {
                   </Animated.View>
                   <View style={styles.dailyBadge}>
                     <EmojiImage emoji={'\u2728'} size={14} />
-                    <Text style={styles.dailyBadgeText}> G\u00FCn\u00FCn Bilmecesi</Text>
+                    <Text style={styles.dailyBadgeText}> Günün Bilmecesi</Text>
                   </View>
                 </View>
                 <Text style={styles.dailyQuestion} numberOfLines={2}>
@@ -135,7 +135,7 @@ export default function HomeScreen() {
           </Animated.View>
 
           {/* Age Group Cards */}
-          <Text style={styles.sectionTitle}>Ya\u015F Gruplar\u0131</Text>
+          <Text style={styles.sectionTitle}>Yaş Grupları</Text>
           <View style={styles.cards}>
             {AGE_GROUPS.map((ag) => {
               const total = RiddleService.getRiddlesByAgeGroup(ag).length;

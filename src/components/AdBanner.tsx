@@ -21,11 +21,11 @@ try {
 }
 
 interface AdBannerProps {
-  size?: 'banner' | 'interstitial';
+  size?: 'banner';
 }
 
 export function AdBanner({ size = 'banner' }: AdBannerProps) {
-  if (size === 'interstitial' || Platform.OS === 'web' || !BannerAd) {
+  if (size !== 'banner' || Platform.OS === 'web' || !BannerAd) {
     return null;
   }
 

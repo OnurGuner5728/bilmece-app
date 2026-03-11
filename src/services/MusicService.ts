@@ -13,6 +13,7 @@ const MUSIC_URL =
 let musicSound: Audio.Sound | null = null;
 let isMusicEnabled = false;
 let isInitialized = false;
+let isLoading = false;
 
 async function ensureAudioConfigured(): Promise<void> {
   if (isInitialized) return;
@@ -41,9 +42,15 @@ export const MusicService = {
 
     try {
       if (musicSound) {
-        await musicSound.playAsync();
+        const status = await musicSound.getStatusAsync();
+        if (status.isLoaded && !status.isPlaying) {
+          await musicSound.playAsync();
+        }
         return;
       }
+
+      if (isLoading) return;
+      isLoading = true;
 
       const { sound } = await Audio.Sound.createAsync(
         { uri: MUSIC_URL },
@@ -53,9 +60,10 @@ export const MusicService = {
           volume: 0.25,
         }
       );
+      isLoading = false;
       musicSound = sound;
     } catch {
-      // Müzik dosyası yüklenemezse sessizce devam et
+      isLoading = false;
     }
   },
 
@@ -68,6 +76,7 @@ export const MusicService = {
 
   async stop(): Promise<void> {
     isMusicEnabled = false;
+    isLoading = false;
     if (musicSound) {
       try {
         await musicSound.stopAsync();

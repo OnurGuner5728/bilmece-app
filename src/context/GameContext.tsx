@@ -20,6 +20,7 @@ type GameAction =
   | { type: 'SELECT_ANSWER'; payload: AnswerOption }
   | { type: 'CLEAR_ANSWER' }
   | { type: 'SAVE_POSITION' }
+  | { type: 'INCREMENT_AD_COUNTER' }
   | { type: 'AWARD_BADGES'; payload: Badge[] };
 
 interface GameContextValue {
@@ -37,7 +38,6 @@ const initialGameState: GameState = {
   riddlesSinceLastAd: 0,
   selectedAnswer: null,
   isAnswered: false,
-  isCorrect: false,
 };
 
 const initialProgress: UserProgress = {
@@ -88,7 +88,6 @@ function gameReducer(
           riddlesSinceLastAd: state.game.riddlesSinceLastAd + 1,
           selectedAnswer: null,
           isAnswered: false,
-          isCorrect: false,
         },
       };
     case 'PREV_RIDDLE':
@@ -100,18 +99,22 @@ function gameReducer(
           showHint: false,
           selectedAnswer: null,
           isAnswered: false,
-          isCorrect: false,
         },
       };
     case 'SET_RIDDLE_INDEX':
       return {
         ...state,
-        game: { ...state.game, currentRiddleIndex: action.payload, showHint: false, selectedAnswer: null, isAnswered: false, isCorrect: false },
+        game: { ...state.game, currentRiddleIndex: action.payload, showHint: false, selectedAnswer: null, isAnswered: false },
       };
     case 'TOGGLE_HINT':
       return {
         ...state,
         game: { ...state.game, showHint: !state.game.showHint },
+      };
+    case 'INCREMENT_AD_COUNTER':
+      return {
+        ...state,
+        game: { ...state.game, riddlesSinceLastAd: state.game.riddlesSinceLastAd + 1 },
       };
     case 'RESET_AD_COUNTER':
       return {
@@ -170,7 +173,6 @@ function gameReducer(
           ...state.game,
           selectedAnswer: action.payload,
           isAnswered: true,
-          isCorrect: action.payload.isCorrect,
         },
       };
     case 'CLEAR_ANSWER':
@@ -180,7 +182,6 @@ function gameReducer(
           ...state.game,
           selectedAnswer: null,
           isAnswered: false,
-          isCorrect: false,
         },
       };
     case 'SAVE_POSITION': {
@@ -199,15 +200,19 @@ function gameReducer(
         },
       };
     }
-    case 'AWARD_BADGES':
+    case 'AWARD_BADGES': {
       if (action.payload.length === 0) return state;
+      const existingIds = new Set(state.progress.badges.map((b) => b.id));
+      const newBadges = action.payload.filter((b) => !existingIds.has(b.id));
+      if (newBadges.length === 0) return state;
       return {
         ...state,
         progress: {
           ...state.progress,
-          badges: [...state.progress.badges, ...action.payload],
+          badges: [...state.progress.badges, ...newBadges],
         },
       };
+    }
     default:
       return state;
   }

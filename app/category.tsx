@@ -14,7 +14,7 @@ import { useSettings } from '../src/context/SettingsContext';
 import { RiddleService, CATEGORY_META } from '../src/services/RiddleService';
 import { ScoreService } from '../src/services/ScoreService';
 import { SpeechService } from '../src/services/SpeechService';
-import { AnswerOption } from '../src/types';
+import { AnswerOption, AgeGroup } from '../src/types';
 import { colors, categoryColors } from '../src/theme/colors';
 import { fonts } from '../src/theme/fonts';
 import { spacing } from '../src/theme/spacing';
@@ -28,7 +28,7 @@ export default function CategoryScreen() {
   const { settings } = useSettings();
   const { showInterstitialAd } = useInterstitialAd();
   const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastAgeGroupRef = useRef<string>('7-9');
+  const lastAgeGroupRef = useRef<AgeGroup>('7-9');
 
   const category = state.selectedCategory;
   const meta = category ? CATEGORY_META[category] : null;
@@ -75,6 +75,18 @@ export default function CategoryScreen() {
     };
   }, []);
 
+  // Play "bitti" sound when all riddles in category are completed (not when category is empty)
+  useEffect(() => {
+    const current = filteredRiddles[state.currentRiddleIndex];
+    if (!current && filteredRiddles.length > 0 && settings.soundEnabled) {
+      SpeechService.speak(
+        'Bu kategorideki tüm bilmeceleri tamamladın!',
+        lastAgeGroupRef.current,
+        'bitti'
+      );
+    }
+  }, [filteredRiddles[state.currentRiddleIndex]?.id, filteredRiddles.length, settings.soundEnabled, state.currentRiddleIndex]);
+
   if (!category) {
     router.replace('/');
     return null;
@@ -83,17 +95,6 @@ export default function CategoryScreen() {
   const currentRiddle = filteredRiddles[state.currentRiddleIndex];
   const accentColor = categoryColors[category ?? ''] ?? colors.primary;
   const catGradient: [string, string] = [accentColor + 'CC', colors.gradientEnd];
-
-  // Play "bitti" sound when all riddles in category are completed (not when category is empty)
-  useEffect(() => {
-    if (!currentRiddle && filteredRiddles.length > 0 && settings.soundEnabled) {
-      SpeechService.speak(
-        'Bu kategorideki tüm bilmeceleri tamamladın!',
-        lastAgeGroupRef.current as any,
-        'bitti'
-      );
-    }
-  }, [currentRiddle?.id, filteredRiddles.length, settings.soundEnabled]);
 
   if (!currentRiddle) {
     const isEmpty = filteredRiddles.length === 0;
@@ -122,6 +123,10 @@ export default function CategoryScreen() {
   const handleAnswerSelect = (option: AnswerOption) => {
     if (state.isAnswered) return;
 
+    if (autoAdvanceTimer.current) {
+      clearTimeout(autoAdvanceTimer.current);
+      autoAdvanceTimer.current = null;
+    }
     SpeechService.stop();
     dispatch({ type: 'SELECT_ANSWER', payload: option });
 
