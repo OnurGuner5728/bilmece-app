@@ -132,7 +132,6 @@ export default function GameScreen() {
         if (shouldShowAd(state.riddlesSinceLastAd)) {
           showInterstitialAd();
         }
-        dispatch({ type: 'RESET_AD_COUNTER' });
         router.push('/answer');
       }, 800);
     } else {
@@ -149,7 +148,7 @@ export default function GameScreen() {
   };
 
   const handleSpeakRiddle = () => {
-    if (state.selectedAgeGroup) {
+    if (state.selectedAgeGroup && settings.soundEnabled) {
       SpeechService.speak(currentRiddle.question, state.selectedAgeGroup, currentRiddle.id);
     }
   };

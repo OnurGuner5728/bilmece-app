@@ -163,7 +163,9 @@ export default function CategoryScreen() {
   };
 
   const handleSpeakRiddle = () => {
-    SpeechService.speak(currentRiddle.question, currentRiddle.ageGroup, currentRiddle.id);
+    if (settings.soundEnabled) {
+      SpeechService.speak(currentRiddle.question, currentRiddle.ageGroup, currentRiddle.id);
+    }
   };
 
   const handleToggleHint = () => {
