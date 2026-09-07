@@ -1,0 +1,64 @@
+name: Build Son Isik APK
+
+on:
+  push:
+    branches: [son-isik-3d]
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: "1"
+      EXPO_NO_TELEMETRY: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.4
+          cache: npm
+
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 36
+        run: yes | sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install JS dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Validate TypeScript
+        run: npx tsc --noEmit
+
+      - name: Generate native Android project
+        run: npx expo prebuild --platform android --no-install --non-interactive
+
+      - name: Build release APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/release/*.apk dist/Son-Isik-3D.apk
+          ls -lh dist/Son-Isik-3D.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Son-Isik-3D-APK
+          path: dist/Son-Isik-3D.apk
+          if-no-files-found: error
+          retention-days: 14
