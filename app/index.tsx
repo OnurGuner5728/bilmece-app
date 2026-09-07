@@ -1,350 +1,244 @@
-import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, { FadeIn, FadeInDown, BounceIn } from 'react-native-reanimated';
-import { AgeGroupCard } from '../src/components/AgeGroupCard';
-import { ScoreDisplay } from '../src/components/ScoreDisplay';
-import { AdBanner } from '../src/components/AdBanner';
-import { useGame } from '../src/context/GameContext';
-import { RiddleService, CATEGORY_META } from '../src/services/RiddleService';
-import { AgeGroup } from '../src/types';
-import { EmojiImage } from '../src/components/EmojiImage';
-import { RealImage } from '../src/components/RealImage';
-import { colors, categoryColors } from '../src/theme/colors';
-import { fonts } from '../src/theme/fonts';
-import { spacing, borderRadius } from '../src/theme/spacing';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GLView } from 'expo-gl';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useRef, useState } from 'react';
+import { Pressable, SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import {
+  GameMode,
+  InputState,
+  LEVELS,
+  STORAGE_KEY,
+  clamp,
+  makeGame,
+  triggerPulse,
+  updateGame,
+} from '../src/sonisik/core';
+import { createRenderer, renderScene } from '../src/sonisik/renderer';
+import { styles } from '../src/sonisik/styles';
 
-const AGE_GROUPS: AgeGroup[] = ['4-6', '7-9', '10-12'];
-const CATEGORIES = ['hayvanlar', 'yiyecek', 'doğa', 'eşyalar', 'vücut', 'araçlar'];
-
-export default function HomeScreen() {
-  const router = useRouter();
-  const { progress, dispatch } = useGame();
-
-  const dailyRiddle = useMemo(() => RiddleService.getDailyRiddle(), []);
-
-  const handleAgeGroupSelect = (ageGroup: AgeGroup) => {
-    dispatch({ type: 'SET_AGE_GROUP', payload: ageGroup });
-    router.push('/difficulty');
-  };
-
-  const handleDailyRiddle = () => {
-    dispatch({ type: 'SET_AGE_GROUP', payload: dailyRiddle.ageGroup });
-    dispatch({ type: 'SET_DIFFICULTY', payload: dailyRiddle.difficulty });
-    const riddles = RiddleService.getFilteredRiddles(dailyRiddle.ageGroup, dailyRiddle.difficulty);
-    const idx = riddles.findIndex((r) => r.id === dailyRiddle.id);
-    dispatch({ type: 'SET_RIDDLE_INDEX', payload: idx >= 0 ? idx : 0 });
-    router.push('/game');
-  };
-
-  const handleCategorySelect = (category: string) => {
-    dispatch({ type: 'SET_CATEGORY', payload: category });
-    router.push('/category');
-  };
-
+function HoldKey({ label, onChange, style }: { label: string; onChange: (pressed: boolean) => void; style?: object }) {
   return (
-    <LinearGradient
-      colors={[colors.gradientStart, colors.gradientEnd]}
-      style={styles.gradient}
+    <Pressable
+      onPressIn={() => onChange(true)}
+      onPressOut={() => onChange(false)}
+      style={({ pressed }) => [styles.dpadKey, style, pressed && styles.dpadKeyPressed]}
     >
-      <SafeAreaView style={styles.safe}>
-        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-          {/* Header with mascot */}
-          <View style={styles.header}>
-            <Animated.View entering={BounceIn.duration(600)} style={styles.mascotRow}>
-              <EmojiImage emoji={'\uD83E\uDD89'} size={44} />
-            </Animated.View>
-            <Text style={styles.title}>Bilmecelerce</Text>
-            <Text style={styles.subtitle}>Yaş grubunu seç ve oynamaya başla!</Text>
-          </View>
-
-          <ScoreDisplay
-            totalScore={progress.totalScore}
-            currentStreak={progress.currentStreak}
-            solvedCount={progress.solvedRiddles.length}
-          />
-
-          {/* Daily Riddle Card */}
-          <Animated.View entering={FadeInDown.duration(500)}>
-            <TouchableOpacity
-              style={styles.dailyCard}
-              onPress={handleDailyRiddle}
-              activeOpacity={0.85}
-            >
-              <LinearGradient
-                colors={['#F472B6', '#FB923C']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.dailyGradient}
-              >
-                <View style={styles.dailyHeader}>
-                  <Animated.View entering={BounceIn.delay(300).duration(600)}>
-                    <View style={styles.dailyEmojiCircle}>
-                      <RealImage imageKey={dailyRiddle.answerImage} emoji={dailyRiddle.answerEmoji} size={40} style={{ borderRadius: 20 }} />
-                    </View>
-                  </Animated.View>
-                  <View style={styles.dailyBadge}>
-                    <EmojiImage emoji={'\u2728'} size={14} />
-                    <Text style={styles.dailyBadgeText}> Günün Bilmecesi</Text>
-                  </View>
-                </View>
-                <Text style={styles.dailyQuestion} numberOfLines={2}>
-                  {dailyRiddle.question}
-                </Text>
-                <Text style={styles.dailyTap}>{'Cevaplamak i\u00E7in dokun \u2192'}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-          </Animated.View>
-
-          {/* Category Selector */}
-          <Animated.View entering={FadeIn.delay(200).duration(400)}>
-            <Text style={styles.sectionTitle}>Kategoriler</Text>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.categoryScroll}
-            >
-              {CATEGORIES.map((cat, idx) => {
-                const meta = CATEGORY_META[cat];
-                const count = RiddleService.getCategoryCount(cat);
-                const accentColor = categoryColors[cat] || colors.primary;
-                return (
-                  <Animated.View key={cat} entering={FadeInDown.delay(idx * 80).duration(300)}>
-                    <TouchableOpacity
-                      style={[styles.categoryChip, { borderBottomColor: accentColor }]}
-                      onPress={() => handleCategorySelect(cat)}
-                      activeOpacity={0.8}
-                    >
-                      <View style={[styles.categoryEmojiCircle, { backgroundColor: accentColor + '18' }]}>
-                        <RealImage
-                          imageKey={`${cat}_icon`}
-                          emoji={meta?.emoji ?? '\uD83D\uDCE6'}
-                          size={26}
-                          style={{ borderRadius: 13 }}
-                        />
-                      </View>
-                      <Text style={styles.categoryLabel}>{meta?.label}</Text>
-                      <Text style={[styles.categoryCount, { color: accentColor }]}>{count}</Text>
-                    </TouchableOpacity>
-                  </Animated.View>
-                );
-              })}
-            </ScrollView>
-          </Animated.View>
-
-          {/* Age Group Cards */}
-          <Text style={styles.sectionTitle}>Yaş Grupları</Text>
-          <View style={styles.cards}>
-            {AGE_GROUPS.map((ag) => {
-              const total = RiddleService.getRiddlesByAgeGroup(ag).length;
-              const solved = progress.solvedRiddles.filter((id) => {
-                const riddle = RiddleService.getRiddleById(id);
-                return riddle && riddle.ageGroup === ag;
-              }).length;
-
-              return (
-                <AgeGroupCard
-                  key={ag}
-                  ageGroup={ag}
-                  onPress={handleAgeGroupSelect}
-                  riddleCount={total}
-                  solvedCount={solved}
-                />
-              );
-            })}
-          </View>
-
-          <View style={styles.footer}>
-            <TouchableOpacity
-              style={styles.footerButton}
-              onPress={() => router.push('/score')}
-            >
-              <View style={styles.footerButtonContent}>
-                <EmojiImage emoji={'\uD83C\uDFC6'} size={20} />
-                <Text style={styles.footerButtonText}>Skor Tablosu</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.footerButton}
-              onPress={() => router.push('/settings')}
-            >
-              <View style={styles.footerButtonContent}>
-                <EmojiImage emoji={'\u2699\uFE0F'} size={20} />
-                <Text style={styles.footerButtonText}>Ayarlar</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        <AdBanner />
-      </SafeAreaView>
-    </LinearGradient>
+      <Text style={styles.dpadLabel}>{label}</Text>
+    </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-  safe: {
-    flex: 1,
-  },
-  scroll: {
-    paddingBottom: spacing.md,
-  },
-  header: {
-    alignItems: 'center',
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.lg,
-  },
-  mascotRow: {
-    marginBottom: spacing.sm,
-  },
-  title: {
-    fontSize: fonts.sizes.title,
-    fontWeight: fonts.weights.extraBold,
-    color: colors.primaryDark,
-    letterSpacing: -0.5,
-  },
-  subtitle: {
-    fontSize: fonts.sizes.md,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-  },
-  // Daily Riddle Card
-  dailyCard: {
-    marginHorizontal: spacing.md,
-    marginTop: spacing.md,
-    borderRadius: borderRadius.xl,
-    overflow: 'hidden',
-    elevation: 6,
-    shadowColor: '#F472B6',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-  },
-  dailyGradient: {
-    padding: spacing.lg,
-  },
-  dailyHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
-  dailyEmojiCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dailyBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: borderRadius.round,
-  },
-  dailyBadgeText: {
-    fontSize: fonts.sizes.sm,
-    fontWeight: fonts.weights.bold,
-    color: '#FFFFFF',
-  },
-  dailyQuestion: {
-    fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.semiBold,
-    color: '#FFFFFF',
-    lineHeight: 28,
-  },
-  dailyTap: {
-    fontSize: fonts.sizes.sm,
-    color: 'rgba(255,255,255,0.85)',
-    marginTop: spacing.sm,
-    fontWeight: fonts.weights.medium,
-  },
-  // Section Title
-  sectionTitle: {
-    fontSize: fonts.sizes.lg,
-    fontWeight: fonts.weights.extraBold,
-    color: colors.primaryDark,
-    marginTop: spacing.lg,
-    marginBottom: spacing.sm,
-    paddingHorizontal: spacing.md,
-  },
-  // Category chips
-  categoryScroll: {
-    paddingHorizontal: spacing.md,
-    gap: spacing.sm,
-  },
-  categoryChip: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: borderRadius.lg,
-    paddingVertical: spacing.sm + 2,
-    paddingHorizontal: spacing.md,
-    alignItems: 'center',
-    minWidth: 86,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    borderBottomWidth: 3,
-    borderBottomColor: colors.primary,
-  },
-  categoryEmojiCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.xs,
-  },
-  categoryLabel: {
-    fontSize: fonts.sizes.sm,
-    fontWeight: fonts.weights.bold,
-    color: colors.text,
-  },
-  categoryCount: {
-    fontSize: fonts.sizes.xs,
-    fontWeight: fonts.weights.semiBold,
-    marginTop: 2,
-  },
-  // Age group cards
-  cards: {
-    paddingHorizontal: spacing.md,
-    marginTop: spacing.xs,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: spacing.md,
-    marginTop: spacing.xl,
-    paddingHorizontal: spacing.md,
-  },
-  footerButton: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.75)',
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.lg,
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-  },
-  footerButtonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  footerButtonText: {
-    fontSize: fonts.sizes.md,
-    fontWeight: fonts.weights.bold,
-    color: colors.primaryDark,
-  },
-});
+export default function SonIsik() {
+  const { width, height } = useWindowDimensions();
+  const [mode, setMode] = useState<GameMode>('menu');
+  const [unlocked, setUnlocked] = useState(1);
+  const [selectedLevel, setSelectedLevel] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [hud, setHud] = useState({ health: 100, energy: 100, lights: 0 });
+
+  const gameRef = useRef(makeGame(0));
+  const inputRef = useRef<InputState>({ up: false, down: false, left: false, right: false });
+  const modeRef = useRef<GameMode>('menu');
+  const unlockedRef = useRef(1);
+  const starsRef = useRef(0);
+  const completedRef = useRef<number[]>([]);
+  const rafRef = useRef<number | null>(null);
+  const lastFrameRef = useRef(0);
+  const uiElapsedRef = useRef(0);
+
+  useEffect(() => {
+    AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw) as { unlocked?: number; stars?: number; completed?: number[] };
+        const savedUnlocked = clamp(Number(data.unlocked || 1), 1, LEVELS.length);
+        const savedStars = Math.max(0, Number(data.stars || 0));
+        const completed = Array.isArray(data.completed) ? data.completed.filter((v) => Number.isInteger(v) && v >= 0 && v < LEVELS.length) : [];
+        unlockedRef.current = savedUnlocked;
+        starsRef.current = savedStars;
+        completedRef.current = completed;
+        setUnlocked(savedUnlocked);
+        setStars(savedStars);
+      } catch {
+        // Corrupt local progress should never block the game.
+      }
+    });
+    return () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  const setGameMode = (next: GameMode) => {
+    modeRef.current = next;
+    setMode(next);
+  };
+
+  const startLevel = (index: number) => {
+    const safe = clamp(index, 0, unlockedRef.current - 1);
+    setSelectedLevel(safe);
+    gameRef.current = makeGame(safe);
+    inputRef.current = { up: false, down: false, left: false, right: false };
+    lastFrameRef.current = 0;
+    uiElapsedRef.current = 0;
+    setHud({ health: 100, energy: 100, lights: 0 });
+    setGameMode('playing');
+  };
+
+  const persistWin = (levelIndex: number, health: number) => {
+    const firstClear = !completedRef.current.includes(levelIndex);
+    const earned = health >= 75 ? 3 : health >= 40 ? 2 : 1;
+    const nextUnlocked = Math.max(unlockedRef.current, Math.min(LEVELS.length, levelIndex + 2));
+    const nextCompleted = firstClear ? [...completedRef.current, levelIndex] : completedRef.current;
+    const nextStars = firstClear ? starsRef.current + earned : starsRef.current;
+
+    unlockedRef.current = nextUnlocked;
+    starsRef.current = nextStars;
+    completedRef.current = nextCompleted;
+    setUnlocked(nextUnlocked);
+    setStars(nextStars);
+    void AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ unlocked: nextUnlocked, stars: nextStars, completed: nextCompleted }));
+  };
+
+  const updateFrame = (dt: number, now: number) => {
+    if (modeRef.current !== 'playing') return;
+    const game = gameRef.current;
+    const result = updateGame(game, inputRef.current, dt, now);
+    uiElapsedRef.current += dt;
+    if (uiElapsedRef.current >= 0.12) {
+      uiElapsedRef.current = 0;
+      setHud({ health: result.health, energy: result.energy, lights: result.lights });
+    }
+    if (result.lost && !game.ended) {
+      game.ended = true;
+      setGameMode('lost');
+    } else if (result.won && !game.ended) {
+      game.ended = true;
+      persistWin(game.level, result.health);
+      setGameMode('won');
+    }
+  };
+
+  const onContextCreate = (gl: any) => {
+    const renderer = createRenderer(gl);
+    const loop = (timestamp: number) => {
+      const seconds = timestamp / 1000;
+      const previous = lastFrameRef.current || seconds;
+      const dt = clamp(seconds - previous, 0, 0.033);
+      lastFrameRef.current = seconds;
+      updateFrame(dt, seconds);
+      renderScene(gl, renderer, gameRef.current, seconds);
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+  };
+
+  const pulse = () => {
+    if (modeRef.current !== 'playing') return;
+    if (triggerPulse(gameRef.current)) {
+      setHud((old) => ({ ...old, energy: gameRef.current.energy }));
+    }
+  };
+
+  const currentLevel = LEVELS[gameRef.current.level];
+  const mission = hud.lights >= currentLevel.required ? 'FENERE ULAŞ' : `${hud.lights}/${currentLevel.required} IŞIK`;
+  const hearts = Math.max(0, Math.ceil(hud.health / 25));
+  const landscape = width >= height;
+
+  return (
+    <View style={styles.root}>
+      <StatusBar hidden />
+      <GLView style={StyleSheet.absoluteFill} onContextCreate={onContextCreate} />
+
+      {mode === 'menu' && (
+        <View style={styles.menuOverlay}>
+          <View style={styles.heroCard}>
+            <Text style={styles.kicker}>3D IŞIK MACERASI</Text>
+            <Text style={styles.title}>SON IŞIK</Text>
+            <Text style={styles.subtitle}>Yüzen adaları keşfet. Işık parçalarını topla. Gölgeleri darbeyle uzaklaştır ve son feneri yak.</Text>
+            <Pressable style={styles.primaryButton} onPress={() => startLevel(selectedLevel)}>
+              <Text style={styles.primaryButtonText}>OYNA</Text>
+            </Pressable>
+            <View style={styles.statRow}>
+              <View style={styles.statPill}><Text style={styles.statValue}>{unlocked}/{LEVELS.length}</Text><Text style={styles.statLabel}>ADA</Text></View>
+              <View style={styles.statPill}><Text style={styles.statValue}>{stars}</Text><Text style={styles.statLabel}>YILDIZ</Text></View>
+              <View style={styles.statPill}><Text style={styles.statValue}>OFFLINE</Text><Text style={styles.statLabel}>MOD</Text></View>
+            </View>
+          </View>
+
+          <View style={styles.levelStrip}>
+            {LEVELS.map((level, i) => {
+              const locked = i >= unlocked;
+              return (
+                <Pressable
+                  key={level.name}
+                  disabled={locked}
+                  onPress={() => setSelectedLevel(i)}
+                  style={[styles.levelCard, i === selectedLevel && styles.levelCardActive, locked && styles.levelCardLocked]}
+                >
+                  <Text style={styles.levelNo}>{locked ? '◆' : `0${i + 1}`}</Text>
+                  <Text numberOfLines={1} style={styles.levelName}>{locked ? 'Kilitli' : level.name}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      )}
+
+      {mode === 'playing' && (
+        <SafeAreaView style={StyleSheet.absoluteFill} pointerEvents="box-none">
+          <View style={styles.hudTop} pointerEvents="none">
+            <View style={styles.hudChip}>
+              <Text style={styles.hudTiny}>{currentLevel.name.toUpperCase()}</Text>
+              <Text style={styles.hudMain}>{mission}</Text>
+            </View>
+            <View style={styles.healthChip}>
+              <Text style={styles.healthText}>{'◆'.repeat(hearts)}{'◇'.repeat(4 - hearts)}</Text>
+              <View style={styles.energyTrack}><View style={[styles.energyFill, { width: `${hud.energy}%` }]} /></View>
+            </View>
+          </View>
+
+          <View style={styles.controls} pointerEvents="box-none">
+            <View style={styles.dpad}>
+              <HoldKey label="▲" style={styles.upKey} onChange={(v) => { inputRef.current.up = v; }} />
+              <HoldKey label="◀" style={styles.leftKey} onChange={(v) => { inputRef.current.left = v; }} />
+              <HoldKey label="▶" style={styles.rightKey} onChange={(v) => { inputRef.current.right = v; }} />
+              <HoldKey label="▼" style={styles.downKey} onChange={(v) => { inputRef.current.down = v; }} />
+            </View>
+            <View style={styles.actionWrap}>
+              <Pressable onPress={pulse} style={({ pressed }) => [styles.pulseButton, hud.energy < 35 && styles.pulseDisabled, pressed && styles.pulsePressed]}>
+                <Text style={styles.pulseIcon}>✦</Text><Text style={styles.pulseText}>DARBE</Text><Text style={styles.pulseCost}>35</Text>
+              </Pressable>
+            </View>
+          </View>
+          {!landscape && <Text style={styles.rotateHint}>En iyi deneyim için telefonu yatay tut.</Text>}
+        </SafeAreaView>
+      )}
+
+      {(mode === 'won' || mode === 'lost') && (
+        <View style={styles.resultOverlay}>
+          <View style={styles.resultCard}>
+            <Text style={styles.resultKicker}>{mode === 'won' ? 'FENER YANDI' : 'GÖLGELER KAZANDI'}</Text>
+            <Text style={styles.resultTitle}>{mode === 'won' ? 'Ada Aydınlandı' : 'Işık Söndü'}</Text>
+            <Text style={styles.resultText}>
+              {mode === 'won'
+                ? (gameRef.current.level === LEVELS.length - 1 ? 'Son ışığı yaktın. Gece geri çekildi.' : `${currentLevel.name} yeniden nefes alıyor.`)
+                : 'Darbe enerjini sakla, gölgeler yaklaşınca kullan ve hareket etmeye devam et.'}
+            </Text>
+            <View style={styles.resultButtons}>
+              <Pressable style={styles.secondaryButton} onPress={() => setGameMode('menu')}><Text style={styles.secondaryButtonText}>MENÜ</Text></Pressable>
+              <Pressable
+                style={styles.primaryButtonSmall}
+                onPress={() => {
+                  if (mode === 'won' && gameRef.current.level < LEVELS.length - 1) startLevel(gameRef.current.level + 1);
+                  else startLevel(gameRef.current.level);
+                }}
+              >
+                <Text style={styles.primaryButtonText}>{mode === 'won' && gameRef.current.level < LEVELS.length - 1 ? 'SONRAKİ ADA' : 'TEKRAR'}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      )}
+    </View>
+  );
+}
