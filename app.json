@@ -1,25 +1,24 @@
 {
   "expo": {
-    "name": "Bilmecelerce",
-    "slug": "bilmecelerce",
-    "version": "1.2.0",
-    "orientation": "portrait",
-    "scheme": "bilmecelerce",
+    "name": "Son Işık",
+    "slug": "son-isik-3d",
+    "version": "1.0.0",
+    "orientation": "landscape",
+    "scheme": "sonisik",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#A8D8EA"
+      "backgroundColor": "#050914"
     },
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.bilmecelerce.app",
-      "buildNumber": "1",
-      "infoPlist": {
-        "NSUserTrackingUsageDescription": "Kisisellestirilmis reklamlar gostermek icin izninizi istiyoruz.",
-        "GADApplicationIdentifier": "ca-app-pub-9813586099759759~7881728821"
+    "android": {
+      "package": "com.onurforce.sonisik",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#050914"
       }
     },
     "web": {
@@ -27,49 +26,6 @@
       "output": "single",
       "favicon": "./assets/icon.png"
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#A8D8EA"
-      },
-      "package": "com.bilmecelerce.app",
-      "versionCode": 4,
-      "permissions": [
-        "com.google.android.gms.permission.AD_ID"
-      ]
-    },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      [
-        "react-native-google-mobile-ads",
-        {
-          "androidAppId": "ca-app-pub-9813586099759759~7881728821",
-          "iosAppId": "ca-app-pub-9813586099759759~7881728821",
-          "userTrackingUsageDescription": "Kisisellestirilmis reklamlar gostermek icin izninizi istiyoruz.",
-          "skAdNetworkItems": [
-            {
-              "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
-            },
-            {
-              "SKAdNetworkIdentifier": "4fzdc2evr5.skadnetwork"
-            },
-            {
-              "SKAdNetworkIdentifier": "2fnua5tdw4.skadnetwork"
-            },
-            {
-              "SKAdNetworkIdentifier": "ydx93a7ass.skadnetwork"
-            }
-          ]
-        }
-      ]
-    ],
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "017ea5e2-64a1-4c42-95d5-332cc5680a37"
-      }
-    },
-    "owner": "ogishere"
+    "plugins": ["expo-router"]
   }
 }
